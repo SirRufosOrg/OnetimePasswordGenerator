@@ -1,6 +1,5 @@
 ﻿using DynamicData;
 using DynamicData.Binding;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace otpApp.ViewModels;
 

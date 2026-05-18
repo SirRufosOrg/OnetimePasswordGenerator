@@ -2,38 +2,34 @@ namespace otpApp.Services;
 
 public class AccountRepository
 {
-    private readonly string _connectionString;
+    private readonly LiteDatabase _db;
 
     public AccountRepository(string connectionString)
     {
-        _connectionString = connectionString;
+        _db = new LiteDatabase(connectionString);
     }
 
     public List<OtpAccount> GetAll()
     {
-        using var db = new LiteDatabase(_connectionString);
-        var col = db.GetCollection<OtpAccount>("accounts");
+        var col = _db.GetCollection<OtpAccount>("accounts");
         return col.Query().OrderByDescending(a => a.CreatedAt).ToList();
     }
 
     public void Insert(OtpAccount account)
     {
-        using var db = new LiteDatabase(_connectionString);
-        var col = db.GetCollection<OtpAccount>("accounts");
+        var col = _db.GetCollection<OtpAccount>("accounts");
         col.Insert(account);
     }
 
     public void Update(OtpAccount account)
     {
-        using var db = new LiteDatabase(_connectionString);
-        var col = db.GetCollection<OtpAccount>("accounts");
+        var col = _db.GetCollection<OtpAccount>("accounts");
         col.Update(account);
     }
 
     public void Delete(int id)
     {
-        using var db = new LiteDatabase(_connectionString);
-        var col = db.GetCollection<OtpAccount>("accounts");
+        var col = _db.GetCollection<OtpAccount>("accounts");
         col.Delete(id);
     }
 }
