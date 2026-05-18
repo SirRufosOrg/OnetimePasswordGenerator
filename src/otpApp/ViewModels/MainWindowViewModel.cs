@@ -50,7 +50,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             .Enhance(Loc.CmdAddAccount, "ShowAdd");
 
         ShowAboutCommand = ReactiveCommand.Create(ShowAbout)
-            .Enhance("About", "ShowAbout");
+            .Enhance(Loc.CmdAbout, "ShowAbout");
 
         this.WhenAnyValue(x => x.SelectedCultureIndex)
             .Subscribe(index => Loc.CurrentCulture = index == 0 ? "en" : "de")

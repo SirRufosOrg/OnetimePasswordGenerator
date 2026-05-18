@@ -15,7 +15,7 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="About OTP App" Command="{Binding ShowAboutCommand}"/>
+            <NativeMenuItem Header="{Binding Loc.CmdAbout}" Command="{Binding ShowAboutCommand}"/>
         </NativeMenu>
     </NativeMenu.Menu>
 
@@ -50,7 +50,7 @@
                         Command="{Binding ShowAboutCommand}"
                         IsVisible="{Binding ShowAboutButton}"
                         Classes="IconButton"
-                        ToolTip.Tip="About"
+                        ToolTip.Tip="{Binding Loc.AboutTooltip}"
                         VerticalAlignment="Center">
                     <TextBlock Text="?" FontSize="16"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>

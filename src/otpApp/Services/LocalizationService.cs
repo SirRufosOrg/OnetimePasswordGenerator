@@ -42,6 +42,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["CmdSave"] = "Save",
             ["CmdCancel"] = "Cancel",
             ["CmdAddAccount"] = "Add Account",
+            ["CmdAbout"] = "About",
+            ["AboutTooltip"] = "About",
             ["Seconds"] = "s",
             ["RemainingSeconds"] = "s",
         },
@@ -71,6 +73,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["CmdSave"] = "Speichern",
             ["CmdCancel"] = "Abbrechen",
             ["CmdAddAccount"] = "Konto hinzufügen",
+            ["CmdAbout"] = "Über",
+            ["AboutTooltip"] = "Über",
             ["Seconds"] = "s",
             ["RemainingSeconds"] = "s",
         }
@@ -117,6 +121,8 @@ public class LocalizationService : INotifyPropertyChanged
     public string CmdSave => GetString("CmdSave");
     public string CmdCancel => GetString("CmdCancel");
     public string CmdAddAccount => GetString("CmdAddAccount");
+    public string CmdAbout => GetString("CmdAbout");
+    public string AboutTooltip => GetString("AboutTooltip");
 
     private string GetString(string key)
     {
