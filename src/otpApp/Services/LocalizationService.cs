@@ -1,11 +1,18 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace otpApp.Services;
 
 public class LocalizationService : INotifyPropertyChanged
 {
-    private string _currentCulture = "en";
+    private string _currentCulture = DetectSystemCulture();
+
+    private static string DetectSystemCulture()
+    {
+        var uiCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        return uiCulture == "de" ? "de" : "en";
+    }
 
     private static readonly Dictionary<string, Dictionary<string, string>> Strings = new()
     {

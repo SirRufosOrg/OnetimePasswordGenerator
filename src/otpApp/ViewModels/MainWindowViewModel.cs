@@ -12,7 +12,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
 
     [Reactive] private bool _showAddDialog;
-    [Reactive] private int _selectedCultureIndex;
+    [Reactive] private int _selectedCultureIndex = LocalizationService.Default.CurrentCulture == "de" ? 1 : 0;
 
     public string[] Languages => ["English", "Deutsch"];
 
