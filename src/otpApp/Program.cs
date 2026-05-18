@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using ReactiveUI.Avalonia;
-using System;
 
 namespace otpApp;
 

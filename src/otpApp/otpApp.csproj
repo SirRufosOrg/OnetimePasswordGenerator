@@ -3,9 +3,23 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="otpApp.Models" />
+    <Using Include="otpApp.Services" />
+    <Using Include="System.Reactive" />
+    <Using Include="System.Reactive.Disposables" />
+    <Using Include="System.Reactive.Linq" />
+    <Using Include="ReactiveUI" />
+    <Using Include="ReactiveUI.SourceGenerators" />
+    <Using Include="LiteDB" />
+    <Using Include="Zafiro.UI.Commands" />
+    <Using Include="System.Collections.ObjectModel" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />

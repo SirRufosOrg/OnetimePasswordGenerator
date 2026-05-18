@@ -1,14 +1,6 @@
-using System;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
-using otpApp.Models;
-using ReactiveUI;
-using ReactiveUI.SourceGenerators;
-using Zafiro.UI.Commands;
 
 namespace otpApp.ViewModels;
 

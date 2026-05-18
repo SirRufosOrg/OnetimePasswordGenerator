@@ -1,7 +1,4 @@
-﻿using otpApp.Services;
-using ReactiveUI;
-
-namespace otpApp.ViewModels;
+﻿namespace otpApp.ViewModels;
 
 public partial class ViewModelBase : ReactiveObject
 {

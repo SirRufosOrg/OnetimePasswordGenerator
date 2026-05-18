@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using DynamicData;
+﻿using DynamicData;
 using DynamicData.Binding;
-using otpApp.Models;
-using otpApp.Services;
-using ReactiveUI;
-using ReactiveUI.SourceGenerators;
-using Zafiro.UI.Commands;
 
 namespace otpApp.ViewModels;
 

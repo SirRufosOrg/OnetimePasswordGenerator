@@ -1,13 +1,3 @@
-using System;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using otpApp.Models;
-using ReactiveUI;
-using ReactiveUI.SourceGenerators;
-using Zafiro.UI.Commands;
-
 namespace otpApp.ViewModels;
 
 public partial class AddAccountViewModel : ViewModelBase, IDisposable
