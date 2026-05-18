@@ -85,9 +85,8 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
             .DisposeWith(_disposables);
 
         this.WhenAnyValue(x => x.RemainingSeconds)
-            .Subscribe(_ =>
+            .Subscribe(r =>
             {
-                var r = RemainingSeconds;
                 var p = Account.Period;
                 Progress = p > 0 ? (double)r / p : 0;
 
