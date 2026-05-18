@@ -24,6 +24,9 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
 
     [Reactive] private bool _showAddDialog;
+    [Reactive] private int _selectedCultureIndex;
+
+    public string[] Languages => ["English", "Deutsch"];
 
     public ReadOnlyObservableCollection<AccountItemViewModel> Accounts => _accounts;
     public IEnhancedCommand ShowAddCommand { get; }
@@ -48,7 +51,11 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             .DisposeWith(_disposables);
 
         ShowAddCommand = ReactiveCommand.Create(() => ShowAddDialog = true)
-            .Enhance("Add Account", "ShowAdd");
+            .Enhance(Loc.CmdAddAccount, "ShowAdd");
+
+        this.WhenAnyValue(x => x.SelectedCultureIndex)
+            .Subscribe(index => Loc.CurrentCulture = index == 0 ? "en" : "de")
+            .DisposeWith(_disposables);
 
         LoadAccounts();
     }

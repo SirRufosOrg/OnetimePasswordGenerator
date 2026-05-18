@@ -7,7 +7,7 @@
         x:Class="otpApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="OTP App"
+        Title="{Binding Loc.AppTitle}"
         Background="{DynamicResource SurfaceDefaultBrush}"
         Width="520"
         Height="780"
@@ -20,13 +20,28 @@
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
         <Border Background="{DynamicResource SurfaceCardBrush}" Padding="20,16">
-            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+            <Grid ColumnDefinitions="*,Auto,Auto" VerticalAlignment="Center" ColumnSpacing="8">
                 <StackPanel>
-                    <TextBlock Text="OTP App" Classes="HeaderText"/>
-                    <TextBlock Text="Time-based One-Time Passwords" Classes="SubHeaderText"/>
+                    <TextBlock Text="{Binding Loc.AppTitle}" Classes="HeaderText"/>
+                    <TextBlock Text="{Binding Loc.AppSubtitle}" Classes="SubHeaderText"/>
                 </StackPanel>
-                <Button Grid.Column="1" Command="{Binding ShowAddCommand}"
-                        Classes="PrimaryButton" Content="+ Add Account"
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding Languages}"
+                          SelectedIndex="{Binding SelectedCultureIndex}"
+                          VerticalAlignment="Center"
+                          Width="110"
+                          Background="{DynamicResource SurfaceSubtleBrush}"
+                          Foreground="{DynamicResource TextPrimaryBrush}"
+                          CornerRadius="8"
+                          BorderThickness="0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Padding="4,2"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Grid.Column="2" Command="{Binding ShowAddCommand}"
+                        Classes="PrimaryButton" Content="{Binding Loc.AddAccountButton}"
                         VerticalAlignment="Center"/>
             </Grid>
         </Border>
@@ -53,19 +68,19 @@
                                                         VerticalAlignment="Top">
                                                 <Button Command="{Binding CopyCommand}"
                                                         Classes="IconButton"
-                                                        ToolTip.Tip="Copy code">
+                                                        ToolTip.Tip="{Binding Loc.CopyTooltip}">
                                                     <TextBlock Text="◆" FontSize="16"
                                                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                                                 </Button>
                                                 <Button Command="{Binding EditCommand}"
                                                         Classes="IconButton"
-                                                        ToolTip.Tip="Edit account">
+                                                        ToolTip.Tip="{Binding Loc.EditTooltip}">
                                                     <TextBlock Text="✎" FontSize="16"
                                                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                                                 </Button>
                                                 <Button Command="{Binding DeleteCommand}"
                                                         Classes="IconButton"
-                                                        ToolTip.Tip="Delete account">
+                                                        ToolTip.Tip="{Binding Loc.DeleteTooltip}">
                                                     <TextBlock Text="✕" FontSize="16"
                                                                Foreground="{DynamicResource AccentRedBrush}"/>
                                                 </Button>
@@ -86,13 +101,13 @@
                                     <!-- Edit Mode -->
                                     <StackPanel IsVisible="{Binding IsEditing}" Spacing="8">
                                         <TextBox Text="{Binding EditIssuer}"
-                                                 PlaceholderText="Issuer (e.g. GitHub)"
+                                                 PlaceholderText="{Binding Loc.IssuerPlaceholder}"
                                                  Classes="UrlTextBox"/>
                                         <TextBox Text="{Binding EditLabel}"
-                                                 PlaceholderText="Label (e.g. user@email.com)"
+                                                 PlaceholderText="{Binding Loc.LabelPlaceholder}"
                                                  Classes="UrlTextBox"/>
                                         <TextBox Text="{Binding EditSecret}"
-                                                 PlaceholderText="Secret Key (Base32)"
+                                                 PlaceholderText="{Binding Loc.SecretPlaceholder}"
                                                  Classes="UrlTextBox"/>
 
                                         <ComboBox ItemsSource="{Binding Algorithms}"
@@ -105,13 +120,13 @@
                                                            Minimum="1" Maximum="10" Increment="1"
                                                            FormatString="0"
                                                            Classes="UrlTextBox"
-                                                           PlaceholderText="Digits"/>
+                                                           PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
                                             <NumericUpDown Grid.Column="1"
                                                            Value="{Binding EditPeriod}"
                                                            Minimum="1" Maximum="3600" Increment="1"
                                                            FormatString="0"
                                                            Classes="UrlTextBox"
-                                                           PlaceholderText="Period (s)"/>
+                                                           PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
                                         </Grid>
 
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
@@ -120,10 +135,10 @@
                                                     Foreground="{DynamicResource TextPrimaryBrush}"
                                                     CornerRadius="8"
                                                     Padding="16,8"
-                                                    Content="Cancel"/>
+                                                    Content="{Binding Loc.Cancel}"/>
                                             <Button Command="{Binding SaveEditCommand}"
                                                     Classes="PrimaryButton"
-                                                    Content="Save"/>
+                                                    Content="{Binding Loc.Save}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
@@ -142,17 +157,17 @@
                             CornerRadius="12"
                             Padding="24">
                         <StackPanel Spacing="16">
-                            <TextBlock Text="Add Account" Classes="HeaderText"/>
-                            <TextBlock Text="Enter your TOTP account details below."
+                            <TextBlock Text="{Binding Loc.AddAccountDialogTitle}" Classes="HeaderText"/>
+                            <TextBlock Text="{Binding Loc.AddAccountDialogSubtitle}"
                                        Classes="SubHeaderText"/>
 
-                            <TextBox PlaceholderText="Issuer (e.g. GitHub)"
+                            <TextBox PlaceholderText="{Binding Loc.IssuerPlaceholder}"
                                      Text="{Binding AddAccountViewModel.Issuer}"
                                      Classes="UrlTextBox"/>
-                            <TextBox PlaceholderText="Label (e.g. user@email.com)"
+                            <TextBox PlaceholderText="{Binding Loc.LabelPlaceholder}"
                                      Text="{Binding AddAccountViewModel.Label}"
                                      Classes="UrlTextBox"/>
-                            <TextBox PlaceholderText="Secret Key (Base32)"
+                            <TextBox PlaceholderText="{Binding Loc.SecretPlaceholder}"
                                      Text="{Binding AddAccountViewModel.Secret}"
                                      Classes="UrlTextBox"/>
 
@@ -166,13 +181,13 @@
                                                Minimum="1" Maximum="10" Increment="1"
                                                FormatString="0"
                                                Classes="UrlTextBox"
-                                               PlaceholderText="Digits"/>
+                                               PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
                                 <NumericUpDown Grid.Column="1"
                                                Value="{Binding AddAccountViewModel.Period}"
                                                Minimum="1" Maximum="3600" Increment="1"
                                                FormatString="0"
                                                Classes="UrlTextBox"
-                                               PlaceholderText="Period (s)"/>
+                                               PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
                             </Grid>
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
@@ -181,11 +196,11 @@
                                         Foreground="{DynamicResource TextPrimaryBrush}"
                                         CornerRadius="8"
                                         Padding="16,8"
-                                        Content="Cancel"/>
+                                        Content="{Binding Loc.Cancel}"/>
                                 <Button Grid.Column="1"
                                         Command="{Binding AddAccountViewModel.SaveCommand}"
                                         Classes="PrimaryButton"
-                                        Content="Save"/>
+                                        Content="{Binding Loc.Save}"/>
                             </Grid>
                         </StackPanel>
                     </Border>

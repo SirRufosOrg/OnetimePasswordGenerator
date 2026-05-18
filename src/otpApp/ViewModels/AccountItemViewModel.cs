@@ -62,10 +62,10 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
             {
             }
         })
-            .Enhance("Copy", "CopyCode");
+            .Enhance(Loc.CmdCopy, "CopyCode");
 
         DeleteCommand = ReactiveCommand.Create(() => onDelete(this))
-            .Enhance("Delete", "DeleteAccount");
+            .Enhance(Loc.CmdDelete, "DeleteAccount");
 
         EditCommand = ReactiveCommand.Create(() =>
         {
@@ -77,13 +77,13 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
             EditPeriod = Account.Period;
             IsEditing = true;
         })
-            .Enhance("Edit", "EditAccount");
+            .Enhance(Loc.CmdEdit, "EditAccount");
 
         SaveEditCommand = ReactiveCommand.Create(() => onEdit(this))
-            .Enhance("Save", "SaveAccountEdit");
+            .Enhance(Loc.CmdSave, "SaveAccountEdit");
 
         CancelEditCommand = ReactiveCommand.Create(() => IsEditing = false)
-            .Enhance("Cancel", "CancelEdit");
+            .Enhance(Loc.CmdCancel, "CancelEdit");
 
         CurrentCode = _totpService.GenerateCode(Account);
 

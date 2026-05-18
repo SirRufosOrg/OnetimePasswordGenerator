@@ -46,11 +46,11 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
         );
 
         SaveCommand = ReactiveCommand.Create(Save, canSave)
-            .Enhance("Save", "SaveAccount");
+            .Enhance(Loc.CmdSave, "SaveAccount");
 
         CancelCommand = ReactiveCommand.CreateFromObservable(() =>
             CancelledInteraction.Handle(Unit.Default).Select(_ => Unit.Default))
-            .Enhance("Cancel", "CancelAdd");
+            .Enhance(Loc.CmdCancel, "CancelAdd");
     }
 
     private void Save()
