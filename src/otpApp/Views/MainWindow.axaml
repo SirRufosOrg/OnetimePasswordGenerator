@@ -66,7 +66,7 @@
 
                                     <StackPanel Grid.Row="1" Margin="0,8,0,0">
                                         <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
-                                        <ProgressBar Value="{Binding Progress}" Classes="CountdownBar"/>
+                                        <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="1" Classes="CountdownBar"/>
                                         <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
                                                    Foreground="{DynamicResource TextSecondaryBrush}"
                                                    FontSize="11"
