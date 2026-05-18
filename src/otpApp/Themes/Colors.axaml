@@ -1,0 +1,36 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Surface Colors -->
+    <Color x:Key="SurfaceDefault">#1C1C1E</Color>
+    <Color x:Key="SurfaceCard">#252528</Color>
+    <Color x:Key="SurfaceSubtle">#2C2C2E</Color>
+    <Color x:Key="SurfaceElevated">#3A3A3C</Color>
+
+    <!-- Text Colors -->
+    <Color x:Key="TextPrimary">#FFFFFF</Color>
+    <Color x:Key="TextSecondary">#8E8E93</Color>
+    <Color x:Key="TextCode">#FFFFFF</Color>
+
+    <!-- Accent Colors -->
+    <Color x:Key="AccentPrimary">#0A84FF</Color>
+    <Color x:Key="AccentGreen">#30D158</Color>
+    <Color x:Key="AccentYellow">#FFD60A</Color>
+    <Color x:Key="AccentRed">#FF453A</Color>
+    <Color x:Key="AccentOrange">#FF9F0A</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="SurfaceDefaultBrush" Color="{StaticResource SurfaceDefault}"/>
+    <SolidColorBrush x:Key="SurfaceCardBrush" Color="{StaticResource SurfaceCard}"/>
+    <SolidColorBrush x:Key="SurfaceSubtleBrush" Color="{StaticResource SurfaceSubtle}"/>
+    <SolidColorBrush x:Key="SurfaceElevatedBrush" Color="{StaticResource SurfaceElevated}"/>
+
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}"/>
+    <SolidColorBrush x:Key="TextCodeBrush" Color="{StaticResource TextCode}"/>
+
+    <SolidColorBrush x:Key="AccentPrimaryBrush" Color="{StaticResource AccentPrimary}"/>
+    <SolidColorBrush x:Key="AccentGreenBrush" Color="{StaticResource AccentGreen}"/>
+    <SolidColorBrush x:Key="AccentYellowBrush" Color="{StaticResource AccentYellow}"/>
+    <SolidColorBrush x:Key="AccentRedBrush" Color="{StaticResource AccentRed}"/>
+    <SolidColorBrush x:Key="AccentOrangeBrush" Color="{StaticResource AccentOrange}"/>
+</ResourceDictionary>

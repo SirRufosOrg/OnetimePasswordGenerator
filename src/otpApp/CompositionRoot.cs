@@ -1,0 +1,30 @@
+using System;
+using System.IO;
+using Microsoft.Extensions.DependencyInjection;
+using otpApp.Models;
+using otpApp.Services;
+using otpApp.ViewModels;
+
+namespace otpApp;
+
+public static class CompositionRoot
+{
+    public static MainWindowViewModel CreateMainViewModel()
+    {
+        var services = new ServiceCollection();
+
+        var dbPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "otpApp", "accounts.db");
+        Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
+
+        services
+            .AddSingleton(new AccountRepository($"Filename={dbPath};Connection=direct"))
+            .AddSingleton<TotpService>()
+            .AddTransient<AddAccountViewModel>()
+            .AddSingleton<MainWindowViewModel>();
+
+        var sp = services.BuildServiceProvider();
+        return sp.GetRequiredService<MainWindowViewModel>();
+    }
+}

@@ -3,18 +3,122 @@
         xmlns:vm="using:otpApp.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="700"
         x:Class="otpApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="otpApp">
+        Title="OTP App"
+        Background="{DynamicResource SurfaceDefaultBrush}"
+        Width="520"
+        Height="780"
+        WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Background="{DynamicResource SurfaceCardBrush}" Padding="20,16">
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Text="OTP App" Classes="HeaderText"/>
+                    <TextBlock Text="Time-based One-Time Passwords" Classes="SubHeaderText"/>
+                </StackPanel>
+                <Button Grid.Column="1" Command="{Binding ShowAddCommand}"
+                        Classes="PrimaryButton" Content="+ Add Account"
+                        VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
 
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" Margin="16,12,16,0">
+            <StackPanel Spacing="0">
+                <!-- Account Cards List -->
+                <ItemsControl ItemsSource="{Binding Accounts}"
+                              Background="Transparent"
+                              BorderThickness="0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:AccountItemViewModel">
+                            <Border Classes="Card">
+                                <Grid RowDefinitions="Auto,Auto">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Account.Issuer}" Classes="IssuerLabel"/>
+                                            <TextBlock Text="{Binding Account.Label}" Classes="LabelText"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4"
+                                                    VerticalAlignment="Top">
+                                            <Button Command="{Binding CopyCommand}"
+                                                    Classes="IconButton"
+                                                    ToolTip.Tip="Copy code">
+                                                <TextBlock Text="◆" FontSize="16"
+                                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                            </Button>
+                                            <Button Command="{Binding DeleteCommand}"
+                                                    Classes="IconButton"
+                                                    ToolTip.Tip="Delete account">
+                                                <TextBlock Text="✕" FontSize="16"
+                                                           Foreground="{DynamicResource AccentRedBrush}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Grid.Row="1" Margin="0,8,0,0">
+                                        <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
+                                        <ProgressBar Value="{Binding Progress}" Classes="CountdownBar"/>
+                                        <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
+                                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                                   FontSize="11"
+                                                   HorizontalAlignment="Right"
+                                                   Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Add Account Dialog Overlay -->
+                <Border IsVisible="{Binding ShowAddDialog}"
+                        Background="#80000000"
+                        CornerRadius="12"
+                        Padding="20"
+                        Margin="0,12,0,0">
+                    <Border Background="{DynamicResource SurfaceCardBrush}"
+                            CornerRadius="12"
+                            Padding="24">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Add Account" Classes="HeaderText"/>
+                            <TextBlock Text="Enter your TOTP account details below."
+                                       Classes="SubHeaderText"/>
+
+                            <TextBox PlaceholderText="Issuer (e.g. GitHub)"
+                                     Text="{Binding AddAccountViewModel.Issuer}"
+                                     Classes="UrlTextBox"/>
+                            <TextBox PlaceholderText="Label (e.g. user@email.com)"
+                                     Text="{Binding AddAccountViewModel.Label}"
+                                     Classes="UrlTextBox"/>
+                            <TextBox PlaceholderText="Secret Key (Base32)"
+                                     Text="{Binding AddAccountViewModel.Secret}"
+                                     Classes="UrlTextBox"/>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                <Button Command="{Binding AddAccountViewModel.CancelCommand}"
+                                        Background="{DynamicResource SurfaceSubtleBrush}"
+                                        Foreground="{DynamicResource TextPrimaryBrush}"
+                                        CornerRadius="8"
+                                        Padding="16,8"
+                                        Content="Cancel"/>
+                                <Button Grid.Column="1"
+                                        Command="{Binding AddAccountViewModel.SaveCommand}"
+                                        Classes="PrimaryButton"
+                                        Content="Save"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>

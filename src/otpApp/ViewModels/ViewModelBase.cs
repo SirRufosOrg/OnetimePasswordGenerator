@@ -2,6 +2,6 @@
 
 namespace otpApp.ViewModels;
 
-public abstract class ViewModelBase : ReactiveObject
+public partial class ViewModelBase : ReactiveObject
 {
 }

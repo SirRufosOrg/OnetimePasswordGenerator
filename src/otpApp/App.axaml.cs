@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using otpApp.ViewModels;
 using otpApp.Views;
 
 namespace otpApp;
@@ -19,7 +18,7 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = CompositionRoot.CreateMainViewModel(),
             };
         }
 
