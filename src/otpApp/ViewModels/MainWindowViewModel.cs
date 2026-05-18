@@ -3,11 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using DynamicData;
 using DynamicData.Binding;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace otpApp.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IDisposable
 {
+    private readonly IServiceProvider _serviceProvider;
     private readonly AccountRepository _repository;
     private readonly TotpService _totpService;
     private readonly SourceList<AccountItemViewModel> _accountsSource = new();
@@ -28,11 +30,12 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public MainWindowViewModel(
         AccountRepository repository,
         TotpService totpService,
-        AddAccountViewModel addAccountViewModel)
+        IServiceProvider serviceProvider)
     {
         _repository = repository;
         _totpService = totpService;
-        AddAccountViewModel = addAccountViewModel;
+        _serviceProvider = serviceProvider;
+        AddAccountViewModel = serviceProvider.GetRequiredService<AddAccountViewModel>();
 
         SubscribeToAddDialog(AddAccountViewModel);
 
@@ -109,7 +112,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
     private void ResetAddDialog()
     {
-        var newVm = new AddAccountViewModel();
+        var newVm = _serviceProvider.GetRequiredService<AddAccountViewModel>();
         SubscribeToAddDialog(newVm);
         AddAccountViewModel = newVm;
         this.RaisePropertyChanged(nameof(AddAccountViewModel));
