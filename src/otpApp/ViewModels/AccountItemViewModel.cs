@@ -42,19 +42,17 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
         CopyCommand = ReactiveCommand.CreateFromTask(async () =>
         {
-            try
+            var clipboard = GetClipboard();
+            if (clipboard != null)
             {
-                var clipboard = GetClipboard();
-                if (clipboard != null)
-                {
-                    await clipboard.SetTextAsync(CurrentCode);
-                }
-            }
-            catch
-            {
+                await clipboard.SetTextAsync(CurrentCode);
             }
         })
             .Enhance(Loc.CmdCopy, "CopyCode");
+
+        CopyCommand.ThrownExceptions
+            .Subscribe(ex => Console.Error.WriteLine($"Copy failed: {ex}"))
+            .DisposeWith(_disposables);
 
         DeleteCommand = ReactiveCommand.Create(() => onDelete(this))
             .Enhance(Loc.CmdDelete, "DeleteAccount");
