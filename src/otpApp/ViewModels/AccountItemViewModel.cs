@@ -1,14 +1,12 @@
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Input.Platform;
-
 namespace otpApp.ViewModels;
 
 public partial class AccountItemViewModel : ViewModelBase, IDisposable
 {
     private readonly TotpService _totpService;
+    private readonly IClipboardService _clipboardService;
     private readonly CompositeDisposable _disposables = new();
 
+    [Reactive] private OtpAccount _account = default!;
     [Reactive] private string _currentCode = "";
     [Reactive] private int _remainingSeconds;
     [Reactive] private double _progress;
@@ -22,8 +20,6 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     [Reactive] private int _editDigits;
     [Reactive] private int _editPeriod;
 
-    public OtpAccount Account { get; }
-    public string DisplayName => $"{Account.Issuer} - {Account.Label}";
     public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
     public IEnhancedCommand CopyCommand { get; }
     public IEnhancedCommand DeleteCommand { get; }
@@ -34,20 +30,18 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     public AccountItemViewModel(
         OtpAccount account,
         TotpService totpService,
+        IClipboardService clipboardService,
         Action<AccountItemViewModel> onDelete,
         Action<AccountItemViewModel> onEdit)
     {
-        Account = account;
+        _account = account;
         _totpService = totpService;
+        _clipboardService = clipboardService;
 
         CopyCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            var clipboard = GetClipboard();
-            if (clipboard != null)
             {
-                await clipboard.SetTextAsync(CurrentCode);
-            }
-        })
+                await _clipboardService.CopyToClipboardAsync(CurrentCode);
+            })
             .Enhance(Loc.CmdCopy, "CopyCode");
 
         CopyCommand.ThrownExceptions
@@ -100,15 +94,6 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
             .DisposeWith(_disposables);
     }
 
-    private static IClipboard? GetClipboard()
-    {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            return desktop.MainWindow?.Clipboard;
-        }
-        return null;
-    }
-
     private void UpdateRemaining(int seconds)
     {
         RemainingSeconds = seconds;
@@ -116,6 +101,11 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         {
             CurrentCode = _totpService.GenerateCode(Account);
         }
+    }
+
+    public void NotifyAccountUpdated()
+    {
+        this.RaisePropertyChanged(nameof(Account));
     }
 
     public void Dispose()

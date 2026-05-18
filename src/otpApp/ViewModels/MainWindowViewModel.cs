@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using DynamicData;
+﻿using DynamicData;
 using DynamicData.Binding;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +9,8 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly IServiceProvider _serviceProvider;
     private readonly AccountRepository _repository;
     private readonly TotpService _totpService;
+    private readonly IClipboardService _clipboardService;
+    private readonly IDialogService _dialogService;
     private readonly SourceList<AccountItemViewModel> _accountsSource = new();
     private readonly CompositeDisposable _disposables = new();
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
@@ -30,11 +29,15 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public MainWindowViewModel(
         AccountRepository repository,
         TotpService totpService,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IClipboardService clipboardService,
+        IDialogService dialogService)
     {
         _repository = repository;
         _totpService = totpService;
         _serviceProvider = serviceProvider;
+        _clipboardService = clipboardService;
+        _dialogService = dialogService;
         AddAccountViewModel = serviceProvider.GetRequiredService<AddAccountViewModel>();
 
         SubscribeToAddDialog(AddAccountViewModel);
@@ -49,7 +52,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         ShowAddCommand = ReactiveCommand.Create(() => ShowAddDialog = true)
             .Enhance(Loc.CmdAddAccount, "ShowAdd");
 
-        ShowAboutCommand = ReactiveCommand.Create(ShowAbout)
+        ShowAboutCommand = ReactiveCommand.Create(_dialogService.ShowAbout)
             .Enhance(Loc.CmdAbout, "ShowAbout");
 
         this.WhenAnyValue(x => x.SelectedCultureIndex)
@@ -57,21 +60,6 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             .DisposeWith(_disposables);
 
         LoadAccounts();
-    }
-
-    private void ShowAbout()
-    {
-        var window = new Views.AboutWindow();
-        window.ShowDialog(GetMainWindow());
-    }
-
-    private static Window GetMainWindow()
-    {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            return desktop.MainWindow!;
-        }
-        throw new InvalidOperationException("No main window available.");
     }
 
     private void SubscribeToAddDialog(AddAccountViewModel vm)
@@ -102,9 +90,13 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private void LoadAccounts()
     {
         var accounts = _repository.GetAll();
-        var accountVms = accounts.Select(a => new AccountItemViewModel(a, _totpService, DeleteAccount, EditAccount));
+        var accountVms = accounts.Select(a => new AccountItemViewModel(a, _totpService, _clipboardService, DeleteAccount, EditAccount));
         _accountsSource.Edit(innerList =>
         {
+            foreach (var vm in innerList)
+            {
+                vm.Dispose();
+            }
             innerList.Clear();
             innerList.AddRange(accountVms);
         });
@@ -136,7 +128,8 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         account.Period = item.EditPeriod;
 
         _repository.Update(account);
-        LoadAccounts();
+        item.NotifyAccountUpdated();
+        item.IsEditing = false;
     }
 
     public void Dispose()

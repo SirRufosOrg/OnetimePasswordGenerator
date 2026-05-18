@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using otpApp.Services;
 using otpApp.ViewModels;
 
 namespace otpApp;
@@ -17,6 +18,8 @@ public static class CompositionRoot
         services
             .AddSingleton(new AccountRepository($"Filename={dbPath};Connection=direct"))
             .AddSingleton<TotpService>()
+            .AddSingleton<IClipboardService, ClipboardService>()
+            .AddSingleton<IDialogService, DialogService>()
             .AddTransient<AddAccountViewModel>()
             .AddSingleton<MainWindowViewModel>();
 
