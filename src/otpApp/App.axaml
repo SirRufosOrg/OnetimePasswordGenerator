@@ -2,8 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:otpApp.Converters"
              x:Class="otpApp.App"
+             x:DataType="vm:MainWindowViewModel"
+             xmlns:vm="using:otpApp.ViewModels"
              xmlns:zafiro="using:Zafiro.Avalonia.ViewLocators"
-              RequestedThemeVariant="Dark">
+             RequestedThemeVariant="Dark">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -23,5 +25,11 @@
         <FluentTheme />
         <StyleInclude Source="avares://otpApp/Themes/Styles.axaml" />
     </Application.Styles>
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="{Binding Loc.CmdAbout}" Command="{Binding ShowAboutCommand}" />
+        </NativeMenu>
+    </NativeMenu.Menu>
 
 </Application>
