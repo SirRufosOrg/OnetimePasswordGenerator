@@ -13,12 +13,6 @@
         Height="780"
         WindowStartupLocation="CenterScreen">
 
-    <NativeMenu.Menu>
-        <NativeMenu>
-            <NativeMenuItem Header="{Binding Loc.CmdAbout}" Command="{Binding ShowAboutCommand}" />
-        </NativeMenu>
-    </NativeMenu.Menu>
-
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>

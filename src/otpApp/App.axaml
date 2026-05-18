@@ -3,7 +3,7 @@
              xmlns:local="using:otpApp.Converters"
              x:Class="otpApp.App"
              xmlns:zafiro="using:Zafiro.Avalonia.ViewLocators"
-             RequestedThemeVariant="Dark">
+              RequestedThemeVariant="Dark">
 
     <Application.Resources>
         <ResourceDictionary>
