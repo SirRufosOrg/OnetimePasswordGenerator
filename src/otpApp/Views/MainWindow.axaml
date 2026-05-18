@@ -41,37 +41,88 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="vm:AccountItemViewModel">
                             <Border Classes="Card">
-                                <Grid RowDefinitions="Auto,Auto">
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Account.Issuer}" Classes="IssuerLabel"/>
-                                            <TextBlock Text="{Binding Account.Label}" Classes="LabelText"/>
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4"
-                                                    VerticalAlignment="Top">
-                                            <Button Command="{Binding CopyCommand}"
-                                                    Classes="IconButton"
-                                                    ToolTip.Tip="Copy code">
-                                                <TextBlock Text="◆" FontSize="16"
-                                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
-                                            </Button>
-                                            <Button Command="{Binding DeleteCommand}"
-                                                    Classes="IconButton"
-                                                    ToolTip.Tip="Delete account">
-                                                <TextBlock Text="✕" FontSize="16"
-                                                           Foreground="{DynamicResource AccentRedBrush}"/>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
+                                <Grid>
+                                    <!-- Display Mode -->
+                                    <StackPanel IsVisible="{Binding IsEditing, Converter={StaticResource InvertBool}}">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Account.Issuer}" Classes="IssuerLabel"/>
+                                                <TextBlock Text="{Binding Account.Label}" Classes="LabelText"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4"
+                                                        VerticalAlignment="Top">
+                                                <Button Command="{Binding CopyCommand}"
+                                                        Classes="IconButton"
+                                                        ToolTip.Tip="Copy code">
+                                                    <TextBlock Text="◆" FontSize="16"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                </Button>
+                                                <Button Command="{Binding EditCommand}"
+                                                        Classes="IconButton"
+                                                        ToolTip.Tip="Edit account">
+                                                    <TextBlock Text="✎" FontSize="16"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                </Button>
+                                                <Button Command="{Binding DeleteCommand}"
+                                                        Classes="IconButton"
+                                                        ToolTip.Tip="Delete account">
+                                                    <TextBlock Text="✕" FontSize="16"
+                                                               Foreground="{DynamicResource AccentRedBrush}"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
 
-                                    <StackPanel Grid.Row="1" Margin="0,8,0,0">
-                                        <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
-                                        <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="1" Classes="CountdownBar"/>
-                                        <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
-                                                   Foreground="{DynamicResource TextSecondaryBrush}"
-                                                   FontSize="11"
-                                                   HorizontalAlignment="Right"
-                                                   Margin="0,2,0,0"/>
+                                        <StackPanel Margin="0,8,0,0">
+                                            <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
+                                            <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="1" Classes="CountdownBar"/>
+                                            <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="11"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <!-- Edit Mode -->
+                                    <StackPanel IsVisible="{Binding IsEditing}" Spacing="8">
+                                        <TextBox Text="{Binding EditIssuer}"
+                                                 PlaceholderText="Issuer (e.g. GitHub)"
+                                                 Classes="UrlTextBox"/>
+                                        <TextBox Text="{Binding EditLabel}"
+                                                 PlaceholderText="Label (e.g. user@email.com)"
+                                                 Classes="UrlTextBox"/>
+                                        <TextBox Text="{Binding EditSecret}"
+                                                 PlaceholderText="Secret Key (Base32)"
+                                                 Classes="UrlTextBox"/>
+
+                                        <ComboBox ItemsSource="{Binding Algorithms}"
+                                                  SelectedItem="{Binding EditAlgorithm}"
+                                                  Classes="UrlTextBox"
+                                                  HorizontalAlignment="Stretch"/>
+
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                            <NumericUpDown Value="{Binding EditDigits}"
+                                                           Minimum="1" Maximum="10"
+                                                           Classes="UrlTextBox"
+                                                           PlaceholderText="Digits"/>
+                                            <NumericUpDown Grid.Column="1"
+                                                           Value="{Binding EditPeriod}"
+                                                           Minimum="1" Maximum="3600"
+                                                           Classes="UrlTextBox"
+                                                           PlaceholderText="Period (s)"/>
+                                        </Grid>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                                            <Button Command="{Binding CancelEditCommand}"
+                                                    Background="{DynamicResource SurfaceSubtleBrush}"
+                                                    Foreground="{DynamicResource TextPrimaryBrush}"
+                                                    CornerRadius="8"
+                                                    Padding="16,8"
+                                                    Content="Cancel"/>
+                                            <Button Command="{Binding SaveEditCommand}"
+                                                    Classes="PrimaryButton"
+                                                    Content="Save"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </Border>

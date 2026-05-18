@@ -27,6 +27,13 @@ public class AccountRepository
         col.Insert(account);
     }
 
+    public void Update(OtpAccount account)
+    {
+        using var db = new LiteDatabase(_connectionString);
+        var col = db.GetCollection<OtpAccount>("accounts");
+        col.Update(account);
+    }
+
     public void Delete(int id)
     {
         using var db = new LiteDatabase(_connectionString);

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia;
@@ -21,15 +22,28 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     [Reactive] private double _progress;
     [Reactive] private string _progressColorClass = "";
 
+    [Reactive] private bool _isEditing;
+    [Reactive] private string _editIssuer = "";
+    [Reactive] private string _editLabel = "";
+    [Reactive] private string _editSecret = "";
+    [Reactive] private OtpAlgorithm _editAlgorithm;
+    [Reactive] private int _editDigits;
+    [Reactive] private int _editPeriod;
+
     public OtpAccount Account { get; }
     public string DisplayName => $"{Account.Issuer} - {Account.Label}";
+    public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
     public IEnhancedCommand CopyCommand { get; }
     public IEnhancedCommand DeleteCommand { get; }
+    public IEnhancedCommand EditCommand { get; }
+    public IEnhancedCommand SaveEditCommand { get; }
+    public IEnhancedCommand CancelEditCommand { get; }
 
     public AccountItemViewModel(
         OtpAccount account,
         TotpService totpService,
-        Action<AccountItemViewModel> onDelete)
+        Action<AccountItemViewModel> onDelete,
+        Action<AccountItemViewModel> onEdit)
     {
         Account = account;
         _totpService = totpService;
@@ -52,6 +66,24 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
         DeleteCommand = ReactiveCommand.Create(() => onDelete(this))
             .Enhance("Delete", "DeleteAccount");
+
+        EditCommand = ReactiveCommand.Create(() =>
+        {
+            EditIssuer = Account.Issuer;
+            EditLabel = Account.Label;
+            EditSecret = Account.SecretBase32;
+            EditAlgorithm = Account.Algorithm;
+            EditDigits = Account.Digits;
+            EditPeriod = Account.Period;
+            IsEditing = true;
+        })
+            .Enhance("Edit", "EditAccount");
+
+        SaveEditCommand = ReactiveCommand.Create(() => onEdit(this))
+            .Enhance("Save", "SaveAccountEdit");
+
+        CancelEditCommand = ReactiveCommand.Create(() => IsEditing = false)
+            .Enhance("Cancel", "CancelEdit");
 
         CurrentCode = _totpService.GenerateCode(Account);
 
