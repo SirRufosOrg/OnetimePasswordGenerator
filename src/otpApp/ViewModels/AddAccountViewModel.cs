@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -16,6 +17,11 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
     [Reactive] private string _issuer = "";
     [Reactive] private string _label = "";
     [Reactive] private string _secret = "";
+    [Reactive] private OtpAlgorithm _algorithm = OtpAlgorithm.SHA1;
+    [Reactive] private int _digits = 6;
+    [Reactive] private int _period = 30;
+
+    public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
 
     public IEnhancedCommand SaveCommand { get; }
     public IEnhancedCommand CancelCommand { get; }
@@ -29,10 +35,14 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
             x => x.Issuer,
             x => x.Label,
             x => x.Secret,
-            (issuer, label, secret) =>
+            x => x.Digits,
+            x => x.Period,
+            (issuer, label, secret, digits, period) =>
                 !string.IsNullOrWhiteSpace(issuer) &&
                 !string.IsNullOrWhiteSpace(label) &&
-                !string.IsNullOrWhiteSpace(secret)
+                !string.IsNullOrWhiteSpace(secret) &&
+                digits > 0 &&
+                period > 0
         );
 
         SaveCommand = ReactiveCommand.Create(Save, canSave)
@@ -50,9 +60,9 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
             Issuer = Issuer.Trim(),
             Label = Label.Trim(),
             SecretBase32 = Secret.Trim(),
-            Algorithm = OtpAlgorithm.SHA1,
-            Digits = 6,
-            Period = 30,
+            Algorithm = Algorithm,
+            Digits = Digits,
+            Period = Period,
             CreatedAt = DateTime.UtcNow
         };
 
