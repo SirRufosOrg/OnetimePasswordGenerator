@@ -102,12 +102,14 @@
 
                                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                             <NumericUpDown Value="{Binding EditDigits}"
-                                                           Minimum="1" Maximum="10"
+                                                           Minimum="1" Maximum="10" Increment="1"
+                                                           FormatString="0"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="Digits"/>
                                             <NumericUpDown Grid.Column="1"
                                                            Value="{Binding EditPeriod}"
-                                                           Minimum="1" Maximum="3600"
+                                                           Minimum="1" Maximum="3600" Increment="1"
+                                                           FormatString="0"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="Period (s)"/>
                                         </Grid>
@@ -161,12 +163,14 @@
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                 <NumericUpDown Value="{Binding AddAccountViewModel.Digits}"
-                                               Minimum="1" Maximum="10"
+                                               Minimum="1" Maximum="10" Increment="1"
+                                               FormatString="0"
                                                Classes="UrlTextBox"
                                                PlaceholderText="Digits"/>
                                 <NumericUpDown Grid.Column="1"
                                                Value="{Binding AddAccountViewModel.Period}"
-                                               Minimum="1" Maximum="3600"
+                                               Minimum="1" Maximum="3600" Increment="1"
+                                               FormatString="0"
                                                Classes="UrlTextBox"
                                                PlaceholderText="Period (s)"/>
                             </Grid>
