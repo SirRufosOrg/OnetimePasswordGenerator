@@ -59,6 +59,16 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
         Saved.Handle(account).Subscribe();
     }
 
+    public void Reset()
+    {
+        Issuer = "";
+        Label = "";
+        Secret = "";
+        Algorithm = OtpAlgorithm.SHA1;
+        Digits = 6;
+        Period = 30;
+    }
+
     public void Dispose()
     {
         _disposables.Dispose();

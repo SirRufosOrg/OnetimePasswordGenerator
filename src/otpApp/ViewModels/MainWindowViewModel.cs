@@ -6,7 +6,6 @@ namespace otpApp.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IDisposable
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly AccountRepository _repository;
     private readonly TotpService _totpService;
     private readonly IClipboardService _clipboardService;
@@ -29,16 +28,15 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public MainWindowViewModel(
         AccountRepository repository,
         TotpService totpService,
-        IServiceProvider serviceProvider,
+        AddAccountViewModel addAccountViewModel,
         IClipboardService clipboardService,
         IDialogService dialogService)
     {
         _repository = repository;
         _totpService = totpService;
-        _serviceProvider = serviceProvider;
         _clipboardService = clipboardService;
         _dialogService = dialogService;
-        AddAccountViewModel = serviceProvider.GetRequiredService<AddAccountViewModel>();
+        AddAccountViewModel = addAccountViewModel;
 
         SubscribeToAddDialog(AddAccountViewModel);
 
@@ -104,10 +102,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
     private void ResetAddDialog()
     {
-        var newVm = _serviceProvider.GetRequiredService<AddAccountViewModel>();
-        SubscribeToAddDialog(newVm);
-        AddAccountViewModel = newVm;
-        this.RaisePropertyChanged(nameof(AddAccountViewModel));
+        AddAccountViewModel.Reset();
     }
 
     private void DeleteAccount(AccountItemViewModel item)
