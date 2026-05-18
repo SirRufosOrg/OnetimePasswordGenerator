@@ -13,6 +13,12 @@
         Height="780"
         WindowStartupLocation="CenterScreen">
 
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="About OTP App" Command="{Binding ShowAboutCommand}"/>
+        </NativeMenu>
+    </NativeMenu.Menu>
+
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
@@ -20,7 +26,7 @@
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
         <Border Background="{DynamicResource SurfaceCardBrush}" Padding="20,16">
-            <Grid ColumnDefinitions="*,Auto,Auto" VerticalAlignment="Center" ColumnSpacing="8">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto" VerticalAlignment="Center" ColumnSpacing="8">
                 <StackPanel>
                     <TextBlock Text="{Binding Loc.AppTitle}" Classes="HeaderText"/>
                     <TextBlock Text="{Binding Loc.AppSubtitle}" Classes="SubHeaderText"/>
@@ -40,7 +46,16 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Grid.Column="2" Command="{Binding ShowAddCommand}"
+                <Button Grid.Column="2"
+                        Command="{Binding ShowAboutCommand}"
+                        IsVisible="{Binding ShowAboutButton}"
+                        Classes="IconButton"
+                        ToolTip.Tip="About"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="?" FontSize="16"
+                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                </Button>
+                <Button Grid.Column="3" Command="{Binding ShowAddCommand}"
                         Classes="PrimaryButton" Content="{Binding Loc.AddAccountButton}"
                         VerticalAlignment="Center"/>
             </Grid>

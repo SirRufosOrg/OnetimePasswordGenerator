@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="otpApp.Views.AboutWindow"
+        Title="About OTP App"
+        Width="360"
+        Height="280"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="{DynamicResource SurfaceDefaultBrush}">
+    <Border Margin="24">
+        <StackPanel VerticalAlignment="Center" Spacing="12">
+            <TextBlock Text="OTP App" Classes="HeaderText"
+                       HorizontalAlignment="Center"/>
+            <TextBlock x:Name="VersionText"
+                       Classes="SubHeaderText"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="Time-based One-Time Passwords"
+                       Classes="SubHeaderText"
+                       HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"/>
+            <TextBlock Text="A simple TOTP authenticator app built with Avalonia UI."
+                       Foreground="{DynamicResource TextSecondaryBrush}"
+                       HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       FontSize="13"/>
+            <Button Content="Close"
+                    Click="OnCloseClick"
+                    HorizontalAlignment="Center"
+                    Background="{DynamicResource SurfaceSubtleBrush}"
+                    Foreground="{DynamicResource TextPrimaryBrush}"
+                    CornerRadius="8"
+                    Padding="24,8"
+                    Margin="0,12,0,0"/>
+        </StackPanel>
+    </Border>
+</Window>

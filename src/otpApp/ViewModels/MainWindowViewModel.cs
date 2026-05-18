@@ -1,4 +1,7 @@
-﻿using DynamicData;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using DynamicData;
 using DynamicData.Binding;
 
 namespace otpApp.ViewModels;
@@ -15,9 +18,11 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     [Reactive] private int _selectedCultureIndex = LocalizationService.Default.CurrentCulture == "de" ? 1 : 0;
 
     public string[] Languages => ["English", "Deutsch"];
+    public bool ShowAboutButton => !OperatingSystem.IsMacOS();
 
     public ReadOnlyObservableCollection<AccountItemViewModel> Accounts => _accounts;
     public IEnhancedCommand ShowAddCommand { get; }
+    public IEnhancedCommand ShowAboutCommand { get; }
     public AddAccountViewModel AddAccountViewModel { get; private set; }
 
     public MainWindowViewModel(
@@ -41,11 +46,29 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         ShowAddCommand = ReactiveCommand.Create(() => ShowAddDialog = true)
             .Enhance(Loc.CmdAddAccount, "ShowAdd");
 
+        ShowAboutCommand = ReactiveCommand.Create(ShowAbout)
+            .Enhance("About", "ShowAbout");
+
         this.WhenAnyValue(x => x.SelectedCultureIndex)
             .Subscribe(index => Loc.CurrentCulture = index == 0 ? "en" : "de")
             .DisposeWith(_disposables);
 
         LoadAccounts();
+    }
+
+    private void ShowAbout()
+    {
+        var window = new Views.AboutWindow();
+        window.ShowDialog(GetMainWindow());
+    }
+
+    private static Window GetMainWindow()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            return desktop.MainWindow!;
+        }
+        throw new InvalidOperationException("No main window available.");
     }
 
     private void SubscribeToAddDialog(AddAccountViewModel vm)
