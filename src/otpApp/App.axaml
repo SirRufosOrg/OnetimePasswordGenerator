@@ -23,4 +23,5 @@
         <FluentTheme />
         <StyleInclude Source="avares://otpApp/Themes/Styles.axaml" />
     </Application.Styles>
+
 </Application>
