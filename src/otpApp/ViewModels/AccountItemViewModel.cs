@@ -53,6 +53,8 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         DeleteCommand = ReactiveCommand.Create(() => onDelete(this))
             .Enhance("Delete", "DeleteAccount");
 
+        CurrentCode = _totpService.GenerateCode(Account);
+
         Observable.Interval(TimeSpan.FromSeconds(1))
             .StartWith(0)
             .Select(_ => _totpService.RemainingSeconds(Account))
