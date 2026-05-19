@@ -130,7 +130,18 @@
 
                                         <!-- TOTP -->
                                         <StackPanel IsVisible="{Binding IsTotp}" Margin="0,8,0,0">
-                                            <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
+                                            <ItemsControl ItemsSource="{Binding CurrentCode, Converter={StaticResource CodeSplitter}}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" Spacing="10"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="x:String">
+                                                        <TextBlock Text="{Binding}" Classes="Code"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                             <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="1" Classes="CountdownBar"/>
                                             <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
                                                        Foreground="{DynamicResource TextSecondaryBrush}"
@@ -139,9 +150,19 @@
                                                        Margin="0,2,0,0"/>
                                         </StackPanel>
                                         <!-- HOTP -->
-                                        <!-- HOTP -->
                                         <StackPanel IsVisible="{Binding IsTotp, Converter={StaticResource InvertBool}}" Margin="0,8,0,0">
-                                            <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
+                                            <ItemsControl ItemsSource="{Binding CurrentCode, Converter={StaticResource CodeSplitter}}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" Spacing="10"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate DataType="x:String">
+                                                        <TextBlock Text="{Binding}" Classes="Code"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,4,0,0">
                                                 <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
                                                     <TextBlock Text="{Binding Loc.Counter}"
