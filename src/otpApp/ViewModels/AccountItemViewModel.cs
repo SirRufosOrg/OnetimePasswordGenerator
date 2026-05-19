@@ -7,6 +7,8 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     private readonly CompositeDisposable _disposables = new();
 
     [Reactive] private OtpAccount _account = default!;
+    [Reactive] private string _displayIssuer = "";
+    [Reactive] private string _displayLabel = "";
     [Reactive] private string _currentCode = "";
     [Reactive] private int _remainingSeconds;
     [Reactive] private double _progress;
@@ -35,6 +37,8 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         Action<AccountItemViewModel> onEdit)
     {
         _account = account;
+        _displayIssuer = account.Issuer;
+        _displayLabel = account.Label;
         _totpService = totpService;
         _clipboardService = clipboardService;
 
@@ -105,7 +109,8 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
     public void NotifyAccountUpdated()
     {
-        this.RaisePropertyChanged(nameof(Account));
+        DisplayIssuer = Account.Issuer;
+        DisplayLabel = Account.Label;
     }
 
     public void Dispose()
