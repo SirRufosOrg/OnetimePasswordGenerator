@@ -125,9 +125,13 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         var accountVms = accounts.Select(a =>
         {
             var vm = new AccountItemViewModel(a, _totpService, _clipboardService, Loc);
-            vm.DeleteRequested.RegisterHandler(ctx =>
+            vm.DeleteRequested.RegisterHandler(async ctx =>
             {
-                DeleteAccount(vm);
+                var confirmed = await ConfirmDelete(vm);
+                if (confirmed)
+                {
+                    DeleteAccount(vm);
+                }
                 ctx.SetOutput(Unit.Default);
             }).DisposeWith(vm.Disposables);
             vm.EditRequested.RegisterHandler(ctx =>
@@ -163,6 +167,12 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         _repository.Delete(item.Account.Id);
         _accountsSource.Remove(item);
         item.Dispose();
+    }
+
+    private async Task<bool> ConfirmDelete(AccountItemViewModel item)
+    {
+        var msg = $"{item.DisplayIssuer} - {item.DisplayLabel}\n\n{Loc.ConfirmDeleteMessage}";
+        return await _dialogService.ConfirmAsync(msg, Loc.ConfirmDeleteConfirm, Loc.Cancel);
     }
 
     private void EditAccount(AccountItemViewModel item)

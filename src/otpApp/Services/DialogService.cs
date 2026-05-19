@@ -22,4 +22,13 @@ public class DialogService : IDialogService
             window.ShowDialog(desktop.MainWindow!);
         }
     }
+
+    public async Task<bool> ConfirmAsync(string message, string confirmText, string cancelText)
+    {
+        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+            return false;
+
+        var dialog = new Views.ConfirmDialog(message, confirmText, cancelText);
+        return await dialog.ShowDialog<bool>(desktop.MainWindow!);
+    }
 }

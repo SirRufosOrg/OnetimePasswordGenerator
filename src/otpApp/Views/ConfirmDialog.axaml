@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="otpApp.Views.ConfirmDialog"
+        Width="360"
+        Height="180"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="{DynamicResource SurfaceDefaultBrush}">
+    <Border Margin="24">
+        <StackPanel VerticalAlignment="Center" Spacing="16">
+            <TextBlock x:Name="MessageText"
+                       Foreground="{DynamicResource TextPrimaryBrush}"
+                       FontSize="14"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"/>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" HorizontalAlignment="Center">
+                <Button x:Name="CancelBtn"
+                        Background="{DynamicResource SurfaceSubtleBrush}"
+                        Foreground="{DynamicResource TextPrimaryBrush}"
+                        CornerRadius="8"
+                        Padding="20,8"
+                        IsCancel="True"/>
+                <Button x:Name="ConfirmBtn"
+                        Grid.Column="1"
+                        Background="#D32F2F"
+                        Foreground="White"
+                        CornerRadius="8"
+                        Padding="20,8"
+                        IsDefault="True"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

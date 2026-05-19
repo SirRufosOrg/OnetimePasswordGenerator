@@ -70,6 +70,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["Exported"] = "exported",
             ["NoAccountsToExport"] = "No accounts to export",
             ["DuplicateAccount"] = "An account with these details already exists",
+            ["ConfirmDeleteMessage"] = "Delete this account?",
+            ["ConfirmDeleteConfirm"] = "Delete",
         },
         ["de"] = new()
         {
@@ -125,6 +127,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["Exported"] = "exportiert",
             ["NoAccountsToExport"] = "Keine Konten zum Exportieren",
             ["DuplicateAccount"] = "Ein Konto mit diesen Daten existiert bereits",
+            ["ConfirmDeleteMessage"] = "Dieses Konto löschen?",
+            ["ConfirmDeleteConfirm"] = "Löschen",
         }
     };
 
@@ -195,6 +199,8 @@ public class LocalizationService : INotifyPropertyChanged
     public string Exported => GetString();
     public string NoAccountsToExport => GetString();
     public string DuplicateAccount => GetString();
+    public string ConfirmDeleteMessage => GetString();
+    public string ConfirmDeleteConfirm => GetString();
 
     private string GetString( [CallerMemberName] string key = "" )
     {
