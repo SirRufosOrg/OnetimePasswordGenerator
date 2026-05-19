@@ -9,6 +9,9 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="{Binding Loc.AppTitle}"
         Background="{DynamicResource SurfaceDefaultBrush}"
+        CanMaximize="False"
+        MinWidth="520"
+        MaxWidth="520"
         Width="520"
         Height="780"
         WindowStartupLocation="CenterScreen">
@@ -131,7 +134,6 @@
                                                 </StackPanel>
                                                 <Button Grid.Column="1" Command="{Binding NextCodeCommand}"
                                                         Content="{Binding Loc.NextCode}"
-                                                        Classes="IconButton"
                                                         FontSize="11"/>
                                             </Grid>
                                         </StackPanel>
