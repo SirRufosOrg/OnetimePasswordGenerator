@@ -32,22 +32,4 @@ public class OtpAccount
             .Replace("-", "")
             .Replace("=", "")
             .ToUpperInvariant();
-
-    public string ToUri()
-    {
-        var type = Type == OtpType.Hotp ? "hotp" : "totp";
-        var path = string.IsNullOrEmpty(Issuer) ? Uri.EscapeDataString(Label) : $"{Uri.EscapeDataString(Issuer)}:{Uri.EscapeDataString(Label)}";
-        var algo = Algorithm switch
-        {
-            OtpAlgorithm.SHA256 => "SHA256",
-            OtpAlgorithm.SHA512 => "SHA512",
-            _ => "SHA1"
-        };
-        var query = $"secret={SecretBase32}&issuer={Uri.EscapeDataString(Issuer)}&algorithm={algo}&digits={Digits}";
-        if (Type == OtpType.Totp)
-            query += $"&period={Period}";
-        else
-            query += $"&counter={HotpCounter}";
-        return $"otpauth://{type}/{path}?{query}";
-    }
 }

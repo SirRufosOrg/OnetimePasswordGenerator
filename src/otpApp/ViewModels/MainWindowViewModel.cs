@@ -11,6 +11,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly IDialogService _dialogService;
     private readonly IFileDialogService _fileDialogService;
     private readonly IPlatformService _platformService;
+    private readonly IOtpUriSerializer _uriSerializer;
     private readonly SourceList<AccountItemViewModel> _accountsSource = new();
     private readonly CompositeDisposable _disposables = new();
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
@@ -38,6 +39,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         IDialogService dialogService,
         IFileDialogService fileDialogService,
         IPlatformService platformService,
+        IOtpUriSerializer uriSerializer,
         LocalizationService localizationService)
         : base(localizationService)
     {
@@ -48,6 +50,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         _dialogService = dialogService;
         _fileDialogService = fileDialogService;
         _platformService = platformService;
+        _uriSerializer = uriSerializer;
         AddAccountViewModel = addAccountViewModel;
 
         SubscribeToAddDialog(AddAccountViewModel);
@@ -271,7 +274,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        var lines = string.Join(Environment.NewLine, accounts.Select(a => a.ToUri()));
+        var lines = string.Join(Environment.NewLine, accounts.Select(a => _uriSerializer.ToUri(a)));
         var success = await _fileDialogService.SaveTextToFileAsync(lines);
         if (success)
             ShowStatusMessage($"{accounts.Count} {Loc.Exported}");

@@ -23,6 +23,7 @@ public static class CompositionRoot
             .AddSingleton<IDialogService, DialogService>()
             .AddSingleton<IFileDialogService, FileDialogService>()
             .AddSingleton<IPlatformService, PlatformService>()
+            .AddSingleton<IOtpUriSerializer, OtpUriSerializer>()
             .AddTransient<AddAccountViewModel>()
             .AddSingleton<MainWindowViewModel>();
 
