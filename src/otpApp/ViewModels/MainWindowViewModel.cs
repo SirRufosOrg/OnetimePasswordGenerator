@@ -16,7 +16,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
 
     [Reactive] private bool _showAddDialog;
-    [Reactive] private int _selectedCultureIndex = LocalizationService.Default.CurrentCulture == "de" ? 1 : 0;
+    [Reactive] private int _selectedCultureIndex;
     [Reactive] private string _statusMessage = "";
 
     public string[] Languages => ["English", "Deutsch"];
@@ -37,8 +37,11 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         IClipboardService clipboardService,
         IDialogService dialogService,
         IFileDialogService fileDialogService,
-        IPlatformService platformService)
+        IPlatformService platformService,
+        LocalizationService localizationService)
+        : base(localizationService)
     {
+        _selectedCultureIndex = Loc.CurrentCulture == "de" ? 1 : 0;
         _repository = repository;
         _totpService = totpService;
         _clipboardService = clipboardService;
@@ -116,7 +119,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private void LoadAccounts()
     {
         var accounts = _repository.GetAll();
-        var accountVms = accounts.Select(a => new AccountItemViewModel(a, _totpService, _clipboardService, DeleteAccount, EditAccount, AdvanceCounter));
+        var accountVms = accounts.Select(a => new AccountItemViewModel(a, _totpService, _clipboardService, Loc, DeleteAccount, EditAccount, AdvanceCounter));
         _accountsSource.Edit(innerList =>
         {
             foreach (var vm in innerList)

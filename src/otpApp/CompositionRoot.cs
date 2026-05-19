@@ -16,6 +16,7 @@ public static class CompositionRoot
         Directory.CreateDirectory(Path.GetDirectoryName(dbPath)!);
 
         services
+            .AddSingleton<LocalizationService>()
             .AddSingleton(new AccountRepository($"Filename={dbPath};Connection=direct"))
             .AddSingleton<TotpService>()
             .AddSingleton<IClipboardService, ClipboardService>()

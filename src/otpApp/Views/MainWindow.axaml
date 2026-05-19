@@ -16,10 +16,6 @@
         Height="780"
         WindowStartupLocation="CenterScreen">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
     <NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="{Binding Loc.MenuFile}">

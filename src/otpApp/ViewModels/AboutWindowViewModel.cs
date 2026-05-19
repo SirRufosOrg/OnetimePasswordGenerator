@@ -7,7 +7,8 @@ public partial class AboutWindowViewModel : ViewModelBase
     public string Version { get; }
     public IEnhancedCommand CloseCommand { get; }
 
-    public AboutWindowViewModel()
+    public AboutWindowViewModel(LocalizationService localizationService)
+        : base(localizationService)
     {
         var v = Assembly.GetExecutingAssembly().GetName().Version;
         Version = v is not null ? $"v{v.Major}.{v.Minor}.{v.Build}" : "v1.0.0";

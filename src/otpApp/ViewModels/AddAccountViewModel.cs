@@ -24,7 +24,8 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
     public Interaction<OtpAccount, Unit> Saved { get; } = new();
     public Interaction<Unit, Unit> CancelledInteraction { get; } = new();
 
-    public AddAccountViewModel()
+    public AddAccountViewModel(LocalizationService localizationService)
+        : base(localizationService)
     {
         this.WhenAnyValue(x => x.Type)
             .Subscribe(t => IsTotp = t == OtpType.Totp)

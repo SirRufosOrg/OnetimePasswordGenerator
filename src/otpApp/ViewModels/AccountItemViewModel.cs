@@ -42,9 +42,11 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         OtpAccount account,
         TotpService totpService,
         IClipboardService clipboardService,
+        LocalizationService localizationService,
         Action<AccountItemViewModel> onDelete,
         Action<AccountItemViewModel> onEdit,
         Action<AccountItemViewModel>? onCounterAdvanced = null)
+        : base(localizationService)
     {
         _account = account;
         _displayIssuer = account.Issuer;
