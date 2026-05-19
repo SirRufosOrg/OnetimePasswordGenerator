@@ -9,7 +9,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
+env:
+  DOTNET_INSTALL_DIR: "./.dotnet"
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
+    
+jobs:    
   build:
 
     runs-on: [self-hosted, Linux]
