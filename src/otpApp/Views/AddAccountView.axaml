@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:otpApp.ViewModels"
+             x:Class="otpApp.Views.AddAccountView"
+             x:DataType="vm:AddAccountViewModel">
+    <Border Background="#80000000" CornerRadius="12" Padding="20">
+        <Border Background="{DynamicResource SurfaceCardBrush}"
+                CornerRadius="12" Padding="24">
+            <StackPanel Spacing="16">
+                <TextBlock Text="{Binding Loc.AddAccountDialogTitle}" Classes="HeaderText"/>
+                <TextBlock Text="{Binding Loc.AddAccountDialogSubtitle}" Classes="SubHeaderText"/>
+
+                <TextBox PlaceholderText="{Binding Loc.IssuerPlaceholder}"
+                         Text="{Binding Issuer}"
+                         ToolTip.Tip="{Binding Loc.IssuerTooltip}"
+                         Classes="UrlTextBox"/>
+                <TextBox PlaceholderText="{Binding Loc.LabelPlaceholder}"
+                         Text="{Binding Label}"
+                         ToolTip.Tip="{Binding Loc.LabelTooltip}"
+                         Classes="UrlTextBox"/>
+                <TextBox PlaceholderText="{Binding Loc.SecretPlaceholder}"
+                         Text="{Binding Secret}"
+                         ToolTip.Tip="{Binding Loc.SecretTooltip}"
+                         Classes="UrlTextBox"/>
+
+                <ComboBox ItemsSource="{Binding Algorithms}"
+                          SelectedItem="{Binding Algorithm}"
+                          ToolTip.Tip="{Binding Loc.AlgorithmTooltip}"
+                          Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
+
+                <ComboBox ItemsSource="{Binding OtpTypes}"
+                          SelectedItem="{Binding Type}"
+                          ToolTip.Tip="{Binding Loc.TypeTooltip}"
+                          Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <NumericUpDown Value="{Binding Digits}"
+                                   Minimum="6" Maximum="8" Increment="2"
+                                   FormatString="0"
+                                   ToolTip.Tip="{Binding Loc.DigitsTooltip}"
+                                   Classes="UrlTextBox"
+                                   PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
+                    <NumericUpDown Grid.Column="1"
+                                   Value="{Binding Period}"
+                                   IsVisible="{Binding IsTotp}"
+                                   Minimum="1" Maximum="3600" Increment="1"
+                                   FormatString="0"
+                                   ToolTip.Tip="{Binding Loc.PeriodTooltip}"
+                                   Classes="UrlTextBox"
+                                   PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
+                    <NumericUpDown Grid.Column="1"
+                                   Value="{Binding HotpCounter}"
+                                   IsVisible="{Binding IsTotp, Converter={StaticResource InvertBool}}"
+                                   Minimum="0" Maximum="999999" Increment="1"
+                                   FormatString="0"
+                                   ToolTip.Tip="{Binding Loc.CounterTooltip}"
+                                   Classes="UrlTextBox"
+                                   PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Command="{Binding CancelCommand}"
+                            Background="{DynamicResource SurfaceSubtleBrush}"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            CornerRadius="8" Padding="16,8"
+                            Content="{Binding Loc.Cancel}"/>
+                    <Button Grid.Column="1"
+                            Command="{Binding SaveCommand}"
+                            Classes="PrimaryButton"
+                            Content="{Binding Loc.Save}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Border>
+</UserControl>

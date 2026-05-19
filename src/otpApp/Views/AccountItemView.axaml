@@ -1,0 +1,155 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:otpApp.ViewModels"
+             x:Class="otpApp.Views.AccountItemView"
+             x:DataType="vm:AccountItemViewModel">
+    <Border Classes="Card">
+        <Grid>
+            <!-- Display Mode -->
+            <StackPanel IsVisible="{Binding IsEditing, Converter={StaticResource InvertBool}}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel>
+                        <TextBlock Text="{Binding DisplayIssuer}" Classes="IssuerLabel"/>
+                        <TextBlock Text="{Binding DisplayLabel}" Classes="LabelText"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4"
+                                VerticalAlignment="Top">
+                        <Button Command="{Binding CopyCommand}"
+                                Classes="IconButton"
+                                ToolTip.Tip="{Binding Loc.CopyTooltip}">
+                            <TextBlock Text="◆" FontSize="16"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        </Button>
+                        <Button Command="{Binding EditCommand}"
+                                Classes="IconButton"
+                                ToolTip.Tip="{Binding Loc.EditTooltip}">
+                            <TextBlock Text="✎" FontSize="16"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        </Button>
+                        <Button Command="{Binding DeleteCommand}"
+                                Classes="IconButton"
+                                ToolTip.Tip="{Binding Loc.DeleteTooltip}">
+                            <TextBlock Text="✕" FontSize="16"
+                                       Foreground="{DynamicResource AccentRedBrush}"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- TOTP -->
+                <StackPanel IsVisible="{Binding IsTotp}" Margin="0,8,0,0">
+                    <ItemsControl ItemsSource="{Binding CurrentCode, Converter={StaticResource CodeSplitter}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="10"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="x:String">
+                                <TextBlock Text="{Binding}" Classes="Code"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="1" Classes="CountdownBar"/>
+                    <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               FontSize="11"
+                               HorizontalAlignment="Right"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+                <!-- HOTP -->
+                <StackPanel IsVisible="{Binding IsTotp, Converter={StaticResource InvertBool}}" Margin="0,8,0,0">
+                    <ItemsControl ItemsSource="{Binding CurrentCode, Converter={StaticResource CodeSplitter}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="10"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="x:String">
+                                <TextBlock Text="{Binding}" Classes="Code"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,4,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Loc.Counter}"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"/>
+                            <TextBlock Text="{Binding Counter}"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       FontSize="11"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Command="{Binding NextCodeCommand}"
+                                Content="{Binding Loc.NextCode}"
+                                FontSize="11"/>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Edit Mode -->
+            <StackPanel IsVisible="{Binding IsEditing}" Spacing="8">
+                <TextBox Text="{Binding EditIssuer}"
+                         PlaceholderText="{Binding Loc.IssuerPlaceholder}"
+                         ToolTip.Tip="{Binding Loc.IssuerTooltip}"
+                         Classes="UrlTextBox"/>
+                <TextBox Text="{Binding EditLabel}"
+                         PlaceholderText="{Binding Loc.LabelPlaceholder}"
+                         ToolTip.Tip="{Binding Loc.LabelTooltip}"
+                         Classes="UrlTextBox"/>
+                <TextBox Text="{Binding EditSecret}"
+                         PlaceholderText="{Binding Loc.SecretPlaceholder}"
+                         ToolTip.Tip="{Binding Loc.SecretTooltip}"
+                         Classes="UrlTextBox"/>
+
+                <ComboBox ItemsSource="{Binding Algorithms}"
+                          SelectedItem="{Binding EditAlgorithm}"
+                          ToolTip.Tip="{Binding Loc.AlgorithmTooltip}"
+                          Classes="UrlTextBox"
+                          HorizontalAlignment="Stretch"/>
+
+                <ComboBox ItemsSource="{Binding OtpTypes}"
+                          SelectedItem="{Binding EditType}"
+                          ToolTip.Tip="{Binding Loc.TypeTooltip}"
+                          Classes="UrlTextBox"
+                          HorizontalAlignment="Stretch"/>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <NumericUpDown Value="{Binding EditDigits}"
+                                   Minimum="6" Maximum="8" Increment="2"
+                                   FormatString="0"
+                                   ToolTip.Tip="{Binding Loc.DigitsTooltip}"
+                                   Classes="UrlTextBox"
+                                   PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
+                    <NumericUpDown Grid.Column="1"
+                                   Value="{Binding EditPeriod}"
+                                   IsVisible="{Binding IsEditTotp}"
+                                   Minimum="1" Maximum="3600" Increment="1"
+                                   FormatString="0"
+                                   ToolTip.Tip="{Binding Loc.PeriodTooltip}"
+                                   Classes="UrlTextBox"
+                                   PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
+                    <NumericUpDown Grid.Column="1"
+                                   Value="{Binding EditCounter}"
+                                   IsVisible="{Binding IsEditTotp, Converter={StaticResource InvertBool}}"
+                                   Minimum="0" Maximum="999999" Increment="1"
+                                   FormatString="0"
+                                   ToolTip.Tip="{Binding Loc.CounterTooltip}"
+                                   Classes="UrlTextBox"
+                                   PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                    <Button Command="{Binding CancelEditCommand}"
+                            Background="{DynamicResource SurfaceSubtleBrush}"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
+                            CornerRadius="8"
+                            Padding="16,8"
+                            Content="{Binding Loc.Cancel}"/>
+                    <Button Command="{Binding SaveEditCommand}"
+                            Classes="PrimaryButton"
+                            Content="{Binding Loc.Save}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
