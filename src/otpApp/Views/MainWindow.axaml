@@ -24,7 +24,8 @@
         <NativeMenu>
             <NativeMenuItem Header="{Binding Loc.MenuFile}">
                 <NativeMenu>
-                    <NativeMenuItem Header="{Binding Loc.AddAccountButton}" Command="{Binding ShowAddCommand}"/>
+                    <NativeMenuItem Header="{Binding Loc.MenuNewAccount}" Command="{Binding ShowAddCommand}"/>
+                    <NativeMenuItem Header="{Binding Loc.ImportFromClipboard}" Command="{Binding ImportFromClipboardCommand}"/>
                 </NativeMenu>
             </NativeMenuItem>
         </NativeMenu>

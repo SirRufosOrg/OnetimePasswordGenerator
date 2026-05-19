@@ -57,6 +57,7 @@ public class LocalizationService : INotifyPropertyChanged
             ["ImportFromClipboard"] = "New from Clipboard",
             ["ImportParseError"] = "No valid authentication data found in clipboard",
             ["AboutTooltip"] = "About",
+            ["MenuNewAccount"] = "New",
             ["MenuFile"] = "File",
             ["MenuServices"] = "Services",
             ["MenuHelp"] = "Help",
@@ -104,6 +105,7 @@ public class LocalizationService : INotifyPropertyChanged
             ["ImportFromClipboard"] = "Neu aus Zwischenablage",
             ["ImportParseError"] = "Keine gültigen Authentifizierungsdaten in der Zwischenablage",
             ["AboutTooltip"] = "Über",
+            ["MenuNewAccount"] = "Neu",
             ["MenuFile"] = "Datei",
             ["MenuServices"] = "Dienste",
             ["MenuHelp"] = "Hilfe",
@@ -159,6 +161,7 @@ public class LocalizationService : INotifyPropertyChanged
     public string AppCmdQuit => GetString();
     public string CmdAddAccount => GetString( "CmdAddAccount" );
     public string CmdAbout => GetString( "CmdAbout" );
+    public string MenuNewAccount => GetString();
     public string MenuFile => GetString( "MenuFile" );
     public string MenuServices => GetString( "MenuServices" );
     public string MenuHelp => GetString( "MenuHelp" );
