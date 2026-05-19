@@ -17,8 +17,8 @@ public static class CompositionRoot
 
         services
             .AddSingleton<LocalizationService>()
-            .AddSingleton(new AccountRepository($"Filename={dbPath};Connection=direct"))
-            .AddSingleton<TotpService>()
+            .AddSingleton<IAccountRepository>(new AccountRepository($"Filename={dbPath};Connection=direct"))
+            .AddSingleton<ITotpService, TotpService>()
             .AddSingleton<IClipboardService, ClipboardService>()
             .AddSingleton<IDialogService, DialogService>()
             .AddSingleton<IFileDialogService, FileDialogService>()

@@ -1,6 +1,6 @@
 namespace otpApp.Services;
 
-public class AccountRepository : IDisposable
+public class AccountRepository : IAccountRepository, IDisposable
 {
     private readonly LiteDatabase _db;
 

@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 namespace otpApp.Models;
 
-public class TotpService
+public class TotpService : ITotpService
 {
     public string GenerateCode(OtpAccount account, DateTime? timestamp = null)
     {

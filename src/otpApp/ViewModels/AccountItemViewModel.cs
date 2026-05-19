@@ -2,7 +2,7 @@ namespace otpApp.ViewModels;
 
 public partial class AccountItemViewModel : ViewModelBase, IDisposable
 {
-    private readonly TotpService _totpService;
+    private readonly ITotpService _totpService;
     private readonly IClipboardService _clipboardService;
     private readonly Action<AccountItemViewModel>? _onCounterAdvanced;
     private readonly CompositeDisposable _disposables = new();
@@ -40,7 +40,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
     public AccountItemViewModel(
         OtpAccount account,
-        TotpService totpService,
+        ITotpService totpService,
         IClipboardService clipboardService,
         LocalizationService localizationService,
         Action<AccountItemViewModel> onDelete,

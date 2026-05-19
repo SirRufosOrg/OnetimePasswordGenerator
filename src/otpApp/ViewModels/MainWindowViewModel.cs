@@ -5,8 +5,8 @@ namespace otpApp.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase, IDisposable
 {
-    private readonly AccountRepository _repository;
-    private readonly TotpService _totpService;
+    private readonly IAccountRepository _repository;
+    private readonly ITotpService _totpService;
     private readonly IClipboardService _clipboardService;
     private readonly IDialogService _dialogService;
     private readonly IFileDialogService _fileDialogService;
@@ -31,8 +31,8 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public AddAccountViewModel AddAccountViewModel { get; private set; }
 
     public MainWindowViewModel(
-        AccountRepository repository,
-        TotpService totpService,
+        IAccountRepository repository,
+        ITotpService totpService,
         AddAccountViewModel addAccountViewModel,
         IClipboardService clipboardService,
         IDialogService dialogService,
