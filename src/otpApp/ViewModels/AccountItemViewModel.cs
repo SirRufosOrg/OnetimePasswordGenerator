@@ -4,9 +4,9 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 {
     private readonly ITotpService _totpService;
     private readonly IClipboardService _clipboardService;
-    private readonly Action<AccountItemViewModel>? _onCounterAdvanced;
     private readonly CompositeDisposable _disposables = new();
     private readonly CompositeDisposable _timerDisposables = new();
+    internal CompositeDisposable Disposables => _disposables;
 
     [Reactive] private OtpAccount _account = default!;
     [Reactive] private string _displayIssuer = "";
@@ -38,14 +38,15 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     public IEnhancedCommand CancelEditCommand { get; }
     public IEnhancedCommand NextCodeCommand { get; }
 
+    public Interaction<Unit, Unit> DeleteRequested { get; } = new();
+    public Interaction<Unit, Unit> EditRequested { get; } = new();
+    public Interaction<Unit, Unit> CounterAdvancedRequested { get; } = new();
+
     public AccountItemViewModel(
         OtpAccount account,
         ITotpService totpService,
         IClipboardService clipboardService,
-        LocalizationService localizationService,
-        Action<AccountItemViewModel> onDelete,
-        Action<AccountItemViewModel> onEdit,
-        Action<AccountItemViewModel>? onCounterAdvanced = null)
+        LocalizationService localizationService)
         : base(localizationService)
     {
         _account = account;
@@ -55,7 +56,6 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         _isTotp = account.Type == OtpType.Totp;
         _totpService = totpService;
         _clipboardService = clipboardService;
-        _onCounterAdvanced = onCounterAdvanced;
 
         CopyCommand = ReactiveCommand.CreateFromTask(CopyCode)
             .Enhance(Loc.CmdCopy, "CopyCode");
@@ -64,14 +64,16 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
             .Subscribe(ex => Console.Error.WriteLine($"Copy failed: {ex}"))
             .DisposeWith(_disposables);
 
-        DeleteCommand = ReactiveCommand.Create(() => onDelete(this))
+        DeleteCommand = ReactiveCommand.CreateFromObservable(() =>
+                DeleteRequested.Handle(Unit.Default))
             .Enhance(Loc.CmdDelete, "DeleteAccount");
 
         EditCommand = ReactiveCommand.Create(StartEdit)
             .Enhance(Loc.CmdEdit, "EditAccount");
 
         var canSave = this.WhenAnyValue(x => x.EditDigits, d => d == 6 || d == 8);
-        SaveEditCommand = ReactiveCommand.Create(() => onEdit(this), canSave)
+        SaveEditCommand = ReactiveCommand.CreateFromObservable(() =>
+                EditRequested.Handle(Unit.Default), canSave)
             .Enhance(Loc.CmdSave, "SaveAccountEdit");
 
         CancelEditCommand = ReactiveCommand.Create(() => IsEditing = false)
@@ -115,7 +117,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         Counter++;
         Account.HotpCounter = Counter;
         CurrentCode = _totpService.GenerateCode(Account, Counter);
-        _onCounterAdvanced?.Invoke(this);
+        CounterAdvancedRequested.Handle(Unit.Default).Subscribe();
     }
 
     private void GenerateInitialCode()
