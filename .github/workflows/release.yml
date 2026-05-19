@@ -41,8 +41,30 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/otpApp
 
-      - name: Publish
-        run: dotnet publish src/otpApp -c Release -r ${{ matrix.rid }} --self-contained -o publish/raw
+      - name: Publish Windows
+        if: ${{ startsWith(matrix.rid, 'win') }}
+        run: |
+          dotnet publish src/otpApp \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained \
+            -o publish/raw \
+            -p:ReadyToRun=true \
+            -p:DebugType=none \
+            -p:PublishSingleFile=true \
+            -p:IncludeAllContentForSelfExtract=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true
+
+      - name: Publish OSX
+        if: ${{ startsWith(matrix.rid, 'osx') }}
+        run: |
+          dotnet publish src/otpApp \
+            -c Release \
+            -r ${{ matrix.rid }} \
+            --self-contained \
+            -o publish/raw \
+            -p:ReadyToRun=true \
+            -p:DebugType=none
 
       - name: Create macOS app bundle
         if: ${{ startsWith(matrix.rid, 'osx') }}
