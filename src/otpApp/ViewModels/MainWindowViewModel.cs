@@ -177,8 +177,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
         var lines = content.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var existing = _repository.GetAll()
-            .Select(a => (Type: a.Type, Issuer: a.Issuer, Label: a.Label, Secret: a.SecretBase32,
-                          Algorithm: a.Algorithm, Digits: a.Digits, Period: a.Period, Counter: a.HotpCounter))
+            .Select(a => (a.Type, a.Issuer, a.Label))
             .ToHashSet();
 
         var imported = 0;
@@ -190,8 +189,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             if (parsed is null)
                 continue;
 
-            var key = (parsed.Type, parsed.Issuer, parsed.Label, parsed.SecretBase32,
-                       parsed.Algorithm, parsed.Digits, parsed.Period, parsed.HotpCounter);
+            var key = (parsed.Type, parsed.Issuer, parsed.Label);
 
             if (existing.Contains(key))
             {
