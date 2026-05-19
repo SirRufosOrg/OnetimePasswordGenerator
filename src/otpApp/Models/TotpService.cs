@@ -7,11 +7,20 @@ public class TotpService
     public string GenerateCode(OtpAccount account, DateTime? timestamp = null)
     {
         var time = timestamp ?? DateTime.UtcNow;
-        var counter = GetCounter(time, account.Period);
+        var counter = GetTimeCounter(time, account.Period);
+        return GenerateOtp(account, counter);
+    }
+
+    public string GenerateCode(OtpAccount account, long counter)
+    {
+        return GenerateOtp(account, GetCounterBytes(counter));
+    }
+
+    private string GenerateOtp(OtpAccount account, byte[] counter)
+    {
         var secret = Base32Decode(account.SecretBase32);
         var hash = ComputeHmac(secret, counter, account.Algorithm);
-        var code = Truncate(hash, account.Digits);
-        return code;
+        return Truncate(hash, account.Digits);
     }
 
     public int RemainingSeconds(OtpAccount account, DateTime? timestamp = null)
@@ -21,10 +30,15 @@ public class TotpService
         return account.Period - (int)(unix % account.Period);
     }
 
-    private static byte[] GetCounter(DateTime time, int period)
+    private static byte[] GetTimeCounter(DateTime time, int period)
     {
         var unix = (long)(time - DateTime.UnixEpoch).TotalSeconds;
         var counter = unix / period;
+        return GetCounterBytes(counter);
+    }
+
+    private static byte[] GetCounterBytes(long counter)
+    {
         return BitConverter.GetBytes(counter).Reverse().ToArray();
     }
 
