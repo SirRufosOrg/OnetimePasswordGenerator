@@ -42,13 +42,35 @@ jobs:
         run: dotnet restore src/otpApp
 
       - name: Publish
-        run: dotnet publish src/otpApp -c Release -r ${{ matrix.rid }} --self-contained -o publish/${{ matrix.suffix }}
+        run: dotnet publish src/otpApp -c Release -r ${{ matrix.rid }} --self-contained -o publish/raw
+
+      - name: Create macOS app bundle
+        if: ${{ startsWith(matrix.rid, 'osx') }}
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          BUNDLE="publish/otpApp-${{ matrix.suffix }}.app"
+          mkdir -p "$BUNDLE/Contents/MacOS" "$BUNDLE/Contents/Resources"
+          cp -R publish/raw/ "$BUNDLE/Contents/MacOS/"
+          sed "s/VERSION/$VERSION/g" src/otpApp/Platform/macOS/Info.plist > "$BUNDLE/Contents/Info.plist"
+          chmod +x "$BUNDLE/Contents/MacOS/otpApp"
+
+      - name: Prepare upload
+        id: prep
+        shell: bash
+        run: |
+          if [ -d "publish/otpApp-${{ matrix.suffix }}.app" ]; then
+            echo "path=publish/otpApp-${{ matrix.suffix }}.app" >> "$GITHUB_OUTPUT"
+          else
+            mv publish/raw "publish/otpApp-${{ matrix.suffix }}"
+            echo "path=publish/otpApp-${{ matrix.suffix }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: otpApp-${{ matrix.suffix }}
-          path: publish/${{ matrix.suffix }}
+          path: ${{ steps.prep.outputs.path }}
 
   release:
     needs: build
@@ -64,11 +86,7 @@ jobs:
         run: |
           for dir in otpApp-*/; do
             name="${dir%/}"
-            if [ "$RUNNER_OS" = "Windows" ]; then
-              7z a "${name}.zip" "./${dir}*"
-            else
-              zip -r "${name}.zip" "${dir}"
-            fi
+            zip -r "${name}.zip" "${dir}"
           done
 
       - name: Release
