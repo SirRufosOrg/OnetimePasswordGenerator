@@ -56,6 +56,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["CmdAbout"] = "About",
             ["ImportFromClipboard"] = "New from Clipboard",
             ["ImportParseError"] = "No valid authentication data found in clipboard",
+            ["Imported"] = "imported",
+            ["DuplicatesSkipped"] = "duplicates skipped",
             ["AboutTooltip"] = "About",
             ["MenuNewAccount"] = "New",
             ["MenuImportFile"] = "Import from File...",
@@ -105,6 +107,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["CmdAbout"] = "Über",
             ["ImportFromClipboard"] = "Neu aus Zwischenablage",
             ["ImportParseError"] = "Keine gültigen Authentifizierungsdaten in der Zwischenablage",
+            ["Imported"] = "importiert",
+            ["DuplicatesSkipped"] = "Duplikate übersprungen",
             ["AboutTooltip"] = "Über",
             ["MenuNewAccount"] = "Neu",
             ["MenuImportFile"] = "Aus Datei importieren...",
@@ -176,6 +180,8 @@ public class LocalizationService : INotifyPropertyChanged
     public string CounterPlaceholder => GetString();
     public string ImportFromClipboard => GetString();
     public string ImportParseError => GetString();
+    public string Imported => GetString();
+    public string DuplicatesSkipped => GetString();
     public string AboutTooltip => GetString( "AboutTooltip" );
 
     private string GetString( [CallerMemberName] string key = "" )
