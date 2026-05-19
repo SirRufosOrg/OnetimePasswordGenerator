@@ -21,6 +21,7 @@ TOTP/HOTP-Authenticator-App mit Avalonia/ReactiveUI/Zafiro – Code-Generierung,
 - **Code sofort beim Start**: `CurrentCode` im Konstruktor von `AccountItemViewModel`
 - **Edit-Funktion**: ✎-Button pro Karte, umschaltbarer Edit-Modus (Issuer/Label/Secret/Algorithm/Digits/Period + Type/Counter für HOTP)
 - **Digits auf 6/8 beschränkt**: NumericUpDown `Min=6 Max=8 Inc=2`, SaveEditCommand validiert via `canSave`
+- **Import aus Zwischenablage**: `SplitButton` mit Flyout "Neu aus Zwischenablage", parst `otpauth://` URIs via `OtpAuthUriParser`, befüllt Add-Dialog oder zeigt Fehlermeldung
 - **i18n**: `LocalizationService` EN/DE, `Loc`-Property auf `ViewModelBase`, alle XAML-Strings via Binding
 - **Sprachauswahl**: ComboBox im Header, schaltet `CurrentCulture` um
 - **Systemsprache**: `CultureInfo.CurrentUICulture.TwoLetterISOLanguageName` beim Start
@@ -65,6 +66,7 @@ TOTP/HOTP-Authenticator-App mit Avalonia/ReactiveUI/Zafiro – Code-Generierung,
 - `src/otpApp/ViewModels/AddAccountViewModel.cs` – Type/Counter-Felder, bedingte Validierung, `Reset()`
 - `src/otpApp/Models/OtpAccount.cs` – `OtpType`-Enum, `Type`, `HotpCounter`
 - `src/otpApp/Models/TotpService.cs` – `GenerateCode(OtpAccount, long counter)`-Overload
+- `src/otpApp/Models/OtpAuthUriParser.cs` – `otpauth://` URI-Parser
 - `src/otpApp/Services/IClipboardService.cs` + `ClipboardService.cs`
 - `src/otpApp/Services/IDialogService.cs` + `DialogService.cs`
 - `src/otpApp/Services/AccountRepository.cs` – single `LiteDatabase`-Instanz

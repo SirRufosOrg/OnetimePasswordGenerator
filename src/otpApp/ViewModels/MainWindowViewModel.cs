@@ -15,6 +15,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
     [Reactive] private bool _showAddDialog;
     [Reactive] private int _selectedCultureIndex = LocalizationService.Default.CurrentCulture == "de" ? 1 : 0;
+    [Reactive] private string _statusMessage = "";
 
     public string[] Languages => ["English", "Deutsch"];
     public bool ShowAboutButton => !OperatingSystem.IsMacOS();
@@ -22,6 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public ReadOnlyObservableCollection<AccountItemViewModel> Accounts => _accounts;
     public IEnhancedCommand ShowAddCommand { get; }
     public IEnhancedCommand ShowAboutCommand { get; }
+    public IEnhancedCommand ImportFromClipboardCommand { get; }
     public AddAccountViewModel AddAccountViewModel { get; private set; }
 
     public MainWindowViewModel(
@@ -51,6 +53,9 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
         ShowAboutCommand = ReactiveCommand.Create(_dialogService.ShowAbout)
             .Enhance(Loc.CmdAbout, "ShowAbout");
+
+        ImportFromClipboardCommand = ReactiveCommand.CreateFromTask(ImportFromClipboard)
+            .Enhance(Loc.ImportFromClipboard, "ImportFromClipboard");
 
         this.WhenAnyValue(x => x.SelectedCultureIndex)
             .Subscribe(index => Loc.CurrentCulture = index == 0 ? "en" : "de")
@@ -131,6 +136,35 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private void AdvanceCounter(AccountItemViewModel item)
     {
         _repository.Update(item.Account);
+    }
+
+    private async Task ImportFromClipboard()
+    {
+        var text = await _clipboardService.GetTextAsync();
+        if (text is null)
+        {
+            ShowImportError();
+            return;
+        }
+
+        var parsed = OtpAuthUriParser.Parse(text);
+        if (parsed is null)
+        {
+            ShowImportError();
+            return;
+        }
+
+        AddAccountViewModel.PopulateFrom(parsed);
+        ShowAddDialog = true;
+    }
+
+    private void ShowImportError()
+    {
+        StatusMessage = Loc.ImportParseError;
+        Observable.Timer(TimeSpan.FromSeconds(3))
+            .ObserveOn(ReactiveUI.RxSchedulers.MainThreadScheduler)
+            .Subscribe(_ => StatusMessage = "")
+            .DisposeWith(_disposables);
     }
 
     public void Dispose()

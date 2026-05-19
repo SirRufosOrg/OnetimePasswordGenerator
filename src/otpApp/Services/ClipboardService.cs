@@ -17,4 +17,18 @@ public class ClipboardService : IClipboardService
             }
         }
     }
+
+    public async Task<string?> GetTextAsync()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var clipboard = desktop.MainWindow?.Clipboard;
+            if (clipboard is not null)
+            {
+                return await clipboard.TryGetTextAsync();
+            }
+        }
+
+        return null;
+    }
 }

@@ -72,6 +72,18 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
         Saved.Handle(account).Subscribe();
     }
 
+    public void PopulateFrom(OtpAccount account)
+    {
+        Issuer = account.Issuer;
+        Label = account.Label;
+        Secret = account.SecretBase32;
+        Type = account.Type;
+        Algorithm = account.Algorithm;
+        Digits = account.Digits;
+        Period = account.Period;
+        HotpCounter = account.HotpCounter;
+    }
+
     public void Reset()
     {
         Issuer = "";

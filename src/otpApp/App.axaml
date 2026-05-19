@@ -14,6 +14,7 @@
                 <ResourceInclude Source="avares://otpApp/Themes/Colors.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:InvertBoolConverter x:Key="InvertBool"/>
+            <local:StringNotEmptyConverter x:Key="NotEmpty"/>
         </ResourceDictionary>
     </Application.Resources>
 

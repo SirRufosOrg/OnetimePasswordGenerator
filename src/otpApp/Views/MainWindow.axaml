@@ -30,7 +30,7 @@
         </NativeMenu>
     </NativeMenu.Menu>
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*">
         <!-- Header -->
         <Border Background="{DynamicResource SurfaceCardBrush}" Padding="20,16">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto" VerticalAlignment="Center" ColumnSpacing="8">
@@ -62,14 +62,33 @@
                     <TextBlock Text="?" FontSize="16"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                 </Button>
-                <Button Grid.Column="3" Command="{Binding ShowAddCommand}"
-                        Classes="PrimaryButton" Content="{Binding Loc.AddAccountButton}"
-                        VerticalAlignment="Center"/>
+                <SplitButton Grid.Column="3" Command="{Binding ShowAddCommand}"
+                             Classes="PrimaryButton"
+                             VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Loc.AddAccountButton}"/>
+                    <SplitButton.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="{Binding Loc.ImportFromClipboard}"
+                                      Command="{Binding ImportFromClipboardCommand}"/>
+                        </MenuFlyout>
+                    </SplitButton.Flyout>
+                </SplitButton>
             </Grid>
         </Border>
 
+        <!-- Status Message -->
+        <Border Grid.Row="1" IsVisible="{Binding StatusMessage, Converter={StaticResource NotEmpty}}"
+                Background="#80D32F2F"
+                Padding="16,8"
+                Margin="16,8,16,0"
+                CornerRadius="8">
+            <TextBlock Text="{Binding StatusMessage}"
+                       Foreground="White"
+                       FontSize="13"/>
+        </Border>
+
         <!-- Content -->
-        <ScrollViewer Grid.Row="1" Margin="16,12,16,0">
+        <ScrollViewer Grid.Row="2" Margin="16,12,16,0">
             <StackPanel Spacing="0">
                 <!-- Account Cards List -->
                 <ItemsControl ItemsSource="{Binding Accounts}"

@@ -54,6 +54,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["AppCmdQuit"] = "Quit otpApp",
             ["CmdAddAccount"] = "Add Account",
             ["CmdAbout"] = "About",
+            ["ImportFromClipboard"] = "New from Clipboard",
+            ["ImportParseError"] = "No valid authentication data found in clipboard",
             ["AboutTooltip"] = "About",
             ["MenuFile"] = "File",
             ["MenuServices"] = "Services",
@@ -99,6 +101,8 @@ public class LocalizationService : INotifyPropertyChanged
             ["AppCmdQuit"] = "otpApp beenden",
             ["CmdAddAccount"] = "Konto hinzufügen",
             ["CmdAbout"] = "Über",
+            ["ImportFromClipboard"] = "Neu aus Zwischenablage",
+            ["ImportParseError"] = "Keine gültigen Authentifizierungsdaten in der Zwischenablage",
             ["AboutTooltip"] = "Über",
             ["MenuFile"] = "Datei",
             ["MenuServices"] = "Dienste",
@@ -164,6 +168,8 @@ public class LocalizationService : INotifyPropertyChanged
     public string Counter => GetString();
     public string NextCode => GetString();
     public string CounterPlaceholder => GetString();
+    public string ImportFromClipboard => GetString();
+    public string ImportParseError => GetString();
     public string AboutTooltip => GetString( "AboutTooltip" );
 
     private string GetString( [CallerMemberName] string key = "" )
