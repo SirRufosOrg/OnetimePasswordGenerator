@@ -1,6 +1,6 @@
 namespace otpApp.Services;
 
-public class AccountRepository
+public class AccountRepository : IDisposable
 {
     private readonly LiteDatabase _db;
 
@@ -31,5 +31,10 @@ public class AccountRepository
     {
         var col = _db.GetCollection<OtpAccount>("accounts");
         col.Delete(id);
+    }
+
+    public void Dispose()
+    {
+        _db.Dispose();
     }
 }

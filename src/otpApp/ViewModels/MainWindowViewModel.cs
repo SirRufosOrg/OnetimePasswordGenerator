@@ -267,6 +267,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public void Dispose()
     {
         _disposables.Dispose();
+        _repository.Dispose();
         foreach (var account in _accountsSource.Items)
         {
             account.Dispose();
