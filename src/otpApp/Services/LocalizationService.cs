@@ -18,7 +18,7 @@ public class LocalizationService : INotifyPropertyChanged
     {
         ["en"] = new()
         {
-            ["AppTitle"] = "OTP App",
+            ["AppTitle"] = "otpApp",
             ["AppSubtitle"] = "Time-based One-Time Passwords",
             ["AddAccountButton"] = "+ Add Account",
             ["AddAccountDialogTitle"] = "Add Account",
@@ -41,15 +41,23 @@ public class LocalizationService : INotifyPropertyChanged
             ["CmdEdit"] = "Edit",
             ["CmdSave"] = "Save",
             ["CmdCancel"] = "Cancel",
+            ["AppCmdAbout"] = "About otpApp",
+            ["AppCmdHide"] = "Hidet otpApp",
+            ["AppCmdHideOthers"] = "Hide Others",
+            ["AppCmdShowAll"] = "Show All",
+            ["AppCmdQuit"] = "Quit otpApp",
             ["CmdAddAccount"] = "Add Account",
             ["CmdAbout"] = "About",
             ["AboutTooltip"] = "About",
+            ["MenuFile"] = "File",
+            ["MenuServices"] = "Services",
+            ["MenuHelp"] = "Help",
             ["Seconds"] = "s",
             ["RemainingSeconds"] = "s",
         },
         ["de"] = new()
         {
-            ["AppTitle"] = "OTP App",
+            ["AppTitle"] = "otpApp",
             ["AppSubtitle"] = "Zeitbasierte Einmalpasswörter",
             ["AddAccountButton"] = "+ Konto hinzufügen",
             ["AddAccountDialogTitle"] = "Konto hinzufügen",
@@ -72,9 +80,17 @@ public class LocalizationService : INotifyPropertyChanged
             ["CmdEdit"] = "Bearbeiten",
             ["CmdSave"] = "Speichern",
             ["CmdCancel"] = "Abbrechen",
+            ["AppCmdAbout"] = "Über otpApp",
+            ["AppCmdHide"] = "otpApp ausblenden",
+            ["AppCmdHideOthers"] = "Andere ausblenden",
+            ["AppCmdShowAll"] = "Alle anzeigen",
+            ["AppCmdQuit"] = "otpApp beenden",
             ["CmdAddAccount"] = "Konto hinzufügen",
             ["CmdAbout"] = "Über",
             ["AboutTooltip"] = "Über",
+            ["MenuFile"] = "Datei",
+            ["MenuServices"] = "Dienste",
+            ["MenuHelp"] = "Hilfe",
             ["Seconds"] = "s",
             ["RemainingSeconds"] = "s",
         }
@@ -87,48 +103,56 @@ public class LocalizationService : INotifyPropertyChanged
         get => _currentCulture;
         set
         {
-            if (_currentCulture != value && Strings.ContainsKey(value))
+            if ( _currentCulture != value && Strings.ContainsKey( value ) )
             {
                 _currentCulture = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
+                PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( string.Empty ) );
             }
         }
     }
 
     public string[] SupportedCultures => Strings.Keys.ToArray();
 
-    public string AppTitle => GetString("AppTitle");
-    public string AppSubtitle => GetString("AppSubtitle");
-    public string AddAccountButton => GetString("AddAccountButton");
-    public string AddAccountDialogTitle => GetString("AddAccountDialogTitle");
-    public string AddAccountDialogSubtitle => GetString("AddAccountDialogSubtitle");
-    public string IssuerPlaceholder => GetString("IssuerPlaceholder");
-    public string LabelPlaceholder => GetString("LabelPlaceholder");
-    public string SecretPlaceholder => GetString("SecretPlaceholder");
-    public string DigitsPlaceholder => GetString("DigitsPlaceholder");
-    public string PeriodPlaceholder => GetString("PeriodPlaceholder");
-    public string Save => GetString("Save");
-    public string Cancel => GetString("Cancel");
-    public string CopyTooltip => GetString("CopyTooltip");
-    public string EditTooltip => GetString("EditTooltip");
-    public string DeleteTooltip => GetString("DeleteTooltip");
-    public string Language => GetString("Language");
-    public string English => GetString("English");
-    public string German => GetString("German");
-    public string CmdCopy => GetString("CmdCopy");
-    public string CmdDelete => GetString("CmdDelete");
-    public string CmdEdit => GetString("CmdEdit");
-    public string CmdSave => GetString("CmdSave");
-    public string CmdCancel => GetString("CmdCancel");
-    public string CmdAddAccount => GetString("CmdAddAccount");
-    public string CmdAbout => GetString("CmdAbout");
-    public string AboutTooltip => GetString("AboutTooltip");
+    public string AppTitle => GetString( "AppTitle" );
+    public string AppSubtitle => GetString( "AppSubtitle" );
+    public string AddAccountButton => GetString( "AddAccountButton" );
+    public string AddAccountDialogTitle => GetString( "AddAccountDialogTitle" );
+    public string AddAccountDialogSubtitle => GetString( "AddAccountDialogSubtitle" );
+    public string IssuerPlaceholder => GetString( "IssuerPlaceholder" );
+    public string LabelPlaceholder => GetString( "LabelPlaceholder" );
+    public string SecretPlaceholder => GetString( "SecretPlaceholder" );
+    public string DigitsPlaceholder => GetString( "DigitsPlaceholder" );
+    public string PeriodPlaceholder => GetString( "PeriodPlaceholder" );
+    public string Save => GetString( "Save" );
+    public string Cancel => GetString( "Cancel" );
+    public string CopyTooltip => GetString( "CopyTooltip" );
+    public string EditTooltip => GetString( "EditTooltip" );
+    public string DeleteTooltip => GetString( "DeleteTooltip" );
+    public string Language => GetString( "Language" );
+    public string English => GetString( "English" );
+    public string German => GetString( "German" );
+    public string CmdCopy => GetString( "CmdCopy" );
+    public string CmdDelete => GetString( "CmdDelete" );
+    public string CmdEdit => GetString( "CmdEdit" );
+    public string CmdSave => GetString( "CmdSave" );
+    public string CmdCancel => GetString( "CmdCancel" );
+    public string AppCmdAbout => GetString();
+    public string AppCmdHide => GetString();
+    public string AppCmdHideOthers => GetString();
+    public string AppCmdShowAll => GetString();
+    public string AppCmdQuit => GetString();
+    public string CmdAddAccount => GetString( "CmdAddAccount" );
+    public string CmdAbout => GetString( "CmdAbout" );
+    public string MenuFile => GetString( "MenuFile" );
+    public string MenuServices => GetString( "MenuServices" );
+    public string MenuHelp => GetString( "MenuHelp" );
+    public string AboutTooltip => GetString( "AboutTooltip" );
 
-    private string GetString(string key)
+    private string GetString( [CallerMemberName] string key = "" )
     {
-        return Strings.TryGetValue(_currentCulture, out var lang) && lang.TryGetValue(key, out var value)
+        return Strings.TryGetValue( _currentCulture, out var lang ) && lang.TryGetValue( key, out var value )
             ? value
-            : (Strings["en"].TryGetValue(key, out var fallback) ? fallback : key);
+            : ( Strings["en"].TryGetValue( key, out var fallback ) ? fallback : key );
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

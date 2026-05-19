@@ -17,6 +17,16 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="{Binding Loc.MenuFile}">
+                <NativeMenu>
+                    <NativeMenuItem Header="{Binding Loc.AddAccountButton}" Command="{Binding ShowAddCommand}"/>
+                </NativeMenu>
+            </NativeMenuItem>
+        </NativeMenu>
+    </NativeMenu.Menu>
+
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
         <Border Background="{DynamicResource SurfaceCardBrush}" Padding="20,16">

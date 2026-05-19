@@ -5,6 +5,7 @@
              x:DataType="vm:MainWindowViewModel"
              xmlns:vm="using:otpApp.ViewModels"
              xmlns:zafiro="using:Zafiro.Avalonia.ViewLocators"
+             Name="otpApp"
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
@@ -28,7 +29,7 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="{Binding Loc.CmdAbout}" Command="{Binding ShowAboutCommand}" />
+            <NativeMenuItem Header="{Binding Loc.AppCmdAbout}" Command="{Binding ShowAboutCommand}" />
         </NativeMenu>
     </NativeMenu.Menu>
 
