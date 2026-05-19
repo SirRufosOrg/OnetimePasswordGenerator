@@ -7,10 +7,13 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
     [Reactive] private string _issuer = "";
     [Reactive] private string _label = "";
     [Reactive] private string _secret = "";
+    [Reactive] private OtpType _type = OtpType.Totp;
     [Reactive] private OtpAlgorithm _algorithm = OtpAlgorithm.SHA1;
     [Reactive] private int _digits = 6;
     [Reactive] private int _period = 30;
+    [Reactive] private long _hotpCounter;
 
+    public OtpType[] OtpTypes => Enum.GetValues<OtpType>();
     public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
 
     public IEnhancedCommand SaveCommand { get; }
@@ -27,12 +30,14 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
             x => x.Secret,
             x => x.Digits,
             x => x.Period,
-            (issuer, label, secret, digits, period) =>
+            x => x.Type,
+            x => x.HotpCounter,
+            (issuer, label, secret, digits, period, type, counter) =>
                 !string.IsNullOrWhiteSpace(issuer) &&
                 !string.IsNullOrWhiteSpace(label) &&
                 !string.IsNullOrWhiteSpace(secret) &&
                 digits > 0 &&
-                period > 0
+                (type == OtpType.Hotp || period > 0)
         );
 
         SaveCommand = ReactiveCommand.Create(Save, canSave)
@@ -47,12 +52,14 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
     {
         var account = new OtpAccount
         {
+            Type = Type,
             Issuer = Issuer.Trim(),
             Label = Label.Trim(),
             SecretBase32 = Secret.Trim(),
             Algorithm = Algorithm,
             Digits = Digits,
             Period = Period,
+            HotpCounter = HotpCounter,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -64,9 +71,11 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
         Issuer = "";
         Label = "";
         Secret = "";
+        Type = OtpType.Totp;
         Algorithm = OtpAlgorithm.SHA1;
         Digits = 6;
         Period = 30;
+        HotpCounter = 0;
     }
 
     public void Dispose()
