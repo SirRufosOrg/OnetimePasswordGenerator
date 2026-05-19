@@ -106,7 +106,8 @@
                                             </StackPanel>
                                         </Grid>
 
-                                        <StackPanel Margin="0,8,0,0">
+                                        <!-- TOTP -->
+                                        <StackPanel IsVisible="{Binding IsTotp}" Margin="0,8,0,0">
                                             <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
                                             <ProgressBar Value="{Binding Progress}" Minimum="0" Maximum="1" Classes="CountdownBar"/>
                                             <TextBlock Text="{Binding RemainingSeconds, StringFormat='{}s'}"
@@ -114,6 +115,25 @@
                                                        FontSize="11"
                                                        HorizontalAlignment="Right"
                                                        Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                        <!-- HOTP -->
+                                        <!-- HOTP -->
+                                        <StackPanel IsVisible="{Binding IsTotp, Converter={StaticResource InvertBool}}" Margin="0,8,0,0">
+                                            <TextBlock Text="{Binding CurrentCode}" Classes="Code"/>
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Margin="0,4,0,0">
+                                                <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Loc.Counter}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               FontSize="11"/>
+                                                    <TextBlock Text="{Binding Counter}"
+                                                               Foreground="{DynamicResource TextSecondaryBrush}"
+                                                               FontSize="11"/>
+                                                </StackPanel>
+                                                <Button Grid.Column="1" Command="{Binding NextCodeCommand}"
+                                                        Content="{Binding Loc.NextCode}"
+                                                        Classes="IconButton"
+                                                        FontSize="11"/>
+                                            </Grid>
                                         </StackPanel>
                                     </StackPanel>
 
@@ -134,6 +154,11 @@
                                                   Classes="UrlTextBox"
                                                   HorizontalAlignment="Stretch"/>
 
+                                        <ComboBox ItemsSource="{Binding OtpTypes}"
+                                                  SelectedItem="{Binding EditType}"
+                                                  Classes="UrlTextBox"
+                                                  HorizontalAlignment="Stretch"/>
+
                                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                             <NumericUpDown Value="{Binding EditDigits}"
                                                            Minimum="1" Maximum="10" Increment="1"
@@ -142,10 +167,18 @@
                                                            PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
                                             <NumericUpDown Grid.Column="1"
                                                            Value="{Binding EditPeriod}"
+                                                           IsVisible="{Binding IsEditTotp}"
                                                            Minimum="1" Maximum="3600" Increment="1"
                                                            FormatString="0"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
+                                            <NumericUpDown Grid.Column="1"
+                                                           Value="{Binding EditCounter}"
+                                                           IsVisible="{Binding IsEditTotp, Converter={StaticResource InvertBool}}"
+                                                           Minimum="0" Maximum="999999" Increment="1"
+                                                           FormatString="0"
+                                                           Classes="UrlTextBox"
+                                                           PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
                                         </Grid>
 
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
@@ -195,6 +228,11 @@
                                       Classes="UrlTextBox"
                                       HorizontalAlignment="Stretch"/>
 
+                            <ComboBox ItemsSource="{Binding AddAccountViewModel.OtpTypes}"
+                                      SelectedItem="{Binding AddAccountViewModel.Type}"
+                                      Classes="UrlTextBox"
+                                      HorizontalAlignment="Stretch"/>
+
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                 <NumericUpDown Value="{Binding AddAccountViewModel.Digits}"
                                                Minimum="1" Maximum="10" Increment="1"
@@ -203,10 +241,18 @@
                                                PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
                                 <NumericUpDown Grid.Column="1"
                                                Value="{Binding AddAccountViewModel.Period}"
+                                               IsVisible="{Binding AddAccountViewModel.IsTotp}"
                                                Minimum="1" Maximum="3600" Increment="1"
                                                FormatString="0"
                                                Classes="UrlTextBox"
                                                PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
+                                <NumericUpDown Grid.Column="1"
+                                               Value="{Binding AddAccountViewModel.HotpCounter}"
+                                               IsVisible="{Binding AddAccountViewModel.IsTotp, Converter={StaticResource InvertBool}}"
+                                               Minimum="0" Maximum="999999" Increment="1"
+                                               FormatString="0"
+                                               Classes="UrlTextBox"
+                                               PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
                             </Grid>
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">

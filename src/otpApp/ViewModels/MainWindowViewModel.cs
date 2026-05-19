@@ -87,7 +87,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private void LoadAccounts()
     {
         var accounts = _repository.GetAll();
-        var accountVms = accounts.Select(a => new AccountItemViewModel(a, _totpService, _clipboardService, DeleteAccount, EditAccount));
+        var accountVms = accounts.Select(a => new AccountItemViewModel(a, _totpService, _clipboardService, DeleteAccount, EditAccount, AdvanceCounter));
         _accountsSource.Edit(innerList =>
         {
             foreach (var vm in innerList)
@@ -114,16 +114,23 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private void EditAccount(AccountItemViewModel item)
     {
         var account = item.Account;
+        account.Type = item.EditType;
         account.Issuer = item.EditIssuer.Trim();
         account.Label = item.EditLabel.Trim();
         account.SecretBase32 = item.EditSecret.Trim();
         account.Algorithm = item.EditAlgorithm;
         account.Digits = item.EditDigits;
         account.Period = item.EditPeriod;
+        account.HotpCounter = item.EditCounter;
 
         _repository.Update(account);
         item.NotifyAccountUpdated();
         item.IsEditing = false;
+    }
+
+    private void AdvanceCounter(AccountItemViewModel item)
+    {
+        _repository.Update(item.Account);
     }
 
     public void Dispose()
