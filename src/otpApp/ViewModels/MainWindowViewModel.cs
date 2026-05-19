@@ -176,9 +176,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             return;
 
         var lines = content.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        var existing = _repository.GetAll()
-            .Select(a => (a.Type, a.Issuer, a.Label))
-            .ToHashSet();
+        var existingKeys = _repository.GetAll().Select(GetAccountKey).ToHashSet();
 
         var imported = 0;
         var duplicates = 0;
@@ -189,16 +187,16 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             if (parsed is null)
                 continue;
 
-            var key = (parsed.Type, parsed.Issuer, parsed.Label);
+            var key = GetAccountKey(parsed);
 
-            if (existing.Contains(key))
+            if (existingKeys.Contains(key))
             {
                 duplicates++;
                 continue;
             }
 
             _repository.Insert(parsed);
-            existing.Add(key);
+            existingKeys.Add(key);
             imported++;
         }
 
@@ -252,6 +250,9 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
             .Subscribe(_ => StatusMessage = "")
             .DisposeWith(_disposables);
     }
+
+    private static string GetAccountKey(OtpAccount a) =>
+        $"{a.Type}|{a.Issuer}|{a.Label}|{a.SecretBase32}|{a.Algorithm}|{a.Digits}|{(a.Type == OtpType.Totp ? a.Period.ToString() : a.HotpCounter.ToString())}";
 
     public void Dispose()
     {
