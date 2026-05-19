@@ -116,7 +116,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     {
         Counter++;
         Account.HotpCounter = Counter;
-        CurrentCode = _totpService.GenerateCode(Account, Counter);
+        CurrentCode = FormatCode(_totpService.GenerateCode(Account, Counter));
         CounterAdvancedRequested.Handle(Unit.Default).Subscribe();
     }
 
@@ -124,11 +124,11 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     {
         if (IsTotp)
         {
-            CurrentCode = _totpService.GenerateCode(Account);
+            CurrentCode = FormatCode(_totpService.GenerateCode(Account));
         }
         else
         {
-            CurrentCode = _totpService.GenerateCode(Account, Counter);
+            CurrentCode = FormatCode(_totpService.GenerateCode(Account, Counter));
         }
     }
 
@@ -164,7 +164,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         RemainingSeconds = seconds;
         if (seconds >= Account.Period || seconds <= 0)
         {
-            CurrentCode = _totpService.GenerateCode(Account);
+            CurrentCode = FormatCode(_totpService.GenerateCode(Account));
         }
     }
 
@@ -176,15 +176,26 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
         if (IsTotp)
         {
-            CurrentCode = _totpService.GenerateCode(Account);
+            CurrentCode = FormatCode(_totpService.GenerateCode(Account));
             StartTimer();
         }
         else
         {
             _timerDisposables.Clear();
             Counter = Account.HotpCounter;
-            CurrentCode = _totpService.GenerateCode(Account, Counter);
+            CurrentCode = FormatCode(_totpService.GenerateCode(Account, Counter));
         }
+    }
+
+    private static string FormatCode(string code)
+    {
+        var parts = new List<string>();
+        for (var i = code.Length; i > 0; i -= 3)
+        {
+            var start = Math.Max(0, i - 3);
+            parts.Insert(0, code[start..i]);
+        }
+        return string.Join(" ", parts);
     }
 
     public void Dispose()
