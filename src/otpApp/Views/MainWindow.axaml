@@ -89,7 +89,7 @@
         </Border>
 
         <!-- Content -->
-        <ScrollViewer Grid.Row="2" Margin="16,12,16,0">
+        <ScrollViewer Grid.Row="2" Margin="16,12,16,0" x:Name="ContentScrollViewer">
             <StackPanel Spacing="0">
                 <!-- Account Cards List -->
                 <ItemsControl ItemsSource="{Binding Accounts}"
