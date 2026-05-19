@@ -21,6 +21,7 @@ public static class CompositionRoot
             .AddSingleton<IClipboardService, ClipboardService>()
             .AddSingleton<IDialogService, DialogService>()
             .AddSingleton<IFileDialogService, FileDialogService>()
+            .AddSingleton<IPlatformService, PlatformService>()
             .AddTransient<AddAccountViewModel>()
             .AddSingleton<MainWindowViewModel>();
 

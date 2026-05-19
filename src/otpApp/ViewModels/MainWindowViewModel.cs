@@ -10,6 +10,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly IClipboardService _clipboardService;
     private readonly IDialogService _dialogService;
     private readonly IFileDialogService _fileDialogService;
+    private readonly IPlatformService _platformService;
     private readonly SourceList<AccountItemViewModel> _accountsSource = new();
     private readonly CompositeDisposable _disposables = new();
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
@@ -19,7 +20,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     [Reactive] private string _statusMessage = "";
 
     public string[] Languages => ["English", "Deutsch"];
-    public bool ShowAboutButton => !OperatingSystem.IsMacOS();
+    public bool ShowAboutButton => _platformService.ShowAboutButton;
 
     public ReadOnlyObservableCollection<AccountItemViewModel> Accounts => _accounts;
     public IEnhancedCommand ShowAddCommand { get; }
@@ -35,13 +36,15 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         AddAccountViewModel addAccountViewModel,
         IClipboardService clipboardService,
         IDialogService dialogService,
-        IFileDialogService fileDialogService)
+        IFileDialogService fileDialogService,
+        IPlatformService platformService)
     {
         _repository = repository;
         _totpService = totpService;
         _clipboardService = clipboardService;
         _dialogService = dialogService;
         _fileDialogService = fileDialogService;
+        _platformService = platformService;
         AddAccountViewModel = addAccountViewModel;
 
         SubscribeToAddDialog(AddAccountViewModel);
