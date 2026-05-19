@@ -5,7 +5,6 @@ namespace otpApp.Platform;
 
 public class MacAppMenuLocalizer
 {
-    private readonly NativeMenu _appMenu;
     private readonly Application _app;
     private readonly LocalizationService _loc;
     private readonly NativeMenuItem? _servicesItem;
@@ -18,18 +17,24 @@ public class MacAppMenuLocalizer
     {
         _app = app;
         _loc = loc;
-        _appMenu = NativeMenu.GetMenu( app ) ?? throw new InvalidOperationException( "Could not get application menu" );
-        var menuItems = _appMenu.Items.OfType<NativeMenuItem>().Reverse().ToList();
+        var appMenu = NativeMenu.GetMenu( app ) ?? throw new InvalidOperationException( "Could not get application menu" );
+        var menuItems = appMenu.Items.OfType<NativeMenuItem>().ToList();
 
-        _servicesItem = menuItems.FirstOrDefault( i => i.Header == "Services" );
-        _hideAppItem = menuItems.FirstOrDefault( i => i.Header == $"Hide {app.Name ?? "Application"}" );
-        _hideOthersItem = menuItems.FirstOrDefault( i => i.Header == "Hide Others" );
-        _showAllItem = menuItems.FirstOrDefault( i => i.Header == "Show All" );
-        _quitItem = menuItems.FirstOrDefault( i => i.Header == "Quit" );
+        _servicesItem = GetLastItem(menuItems, 0);
+        _hideAppItem = GetLastItem(menuItems, 1);
+        _hideOthersItem = GetLastItem(menuItems, 2);
+        _showAllItem = GetLastItem(menuItems, 3);
+        _quitItem = GetLastItem(menuItems, 4);
 
         Localize();
 
-        _loc.PropertyChanged += ( s, e ) => Localize();
+        loc.PropertyChanged += ( _, _ ) => Localize();
+    }
+
+    private static NativeMenuItem? GetLastItem(List<NativeMenuItem> items, int offsetFromEnd)
+    {
+        var index = items.Count - 1 - offsetFromEnd;
+        return index >= 0 ? items[index] : null;
     }
 
     private void Localize()
