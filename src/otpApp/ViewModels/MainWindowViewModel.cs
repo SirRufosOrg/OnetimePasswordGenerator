@@ -133,7 +133,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         account.Type = item.EditType;
         account.Issuer = item.EditIssuer.Trim();
         account.Label = item.EditLabel.Trim();
-        account.SecretBase32 = item.EditSecret.Trim();
+        account.SecretBase32 = OtpAccount.NormalizeSecret(item.EditSecret);
         account.Algorithm = item.EditAlgorithm;
         account.Digits = item.EditDigits;
         account.Period = item.EditPeriod;
@@ -252,7 +252,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     }
 
     private static string GetAccountKey(OtpAccount a) =>
-        $"{a.Type}|{a.Issuer}|{a.Label}|{a.SecretBase32}|{a.Algorithm}|{a.Digits}|{(a.Type == OtpType.Totp ? a.Period.ToString() : a.HotpCounter.ToString())}";
+        $"{a.Type}|{a.Issuer}|{a.Label}|{OtpAccount.NormalizeSecret(a.SecretBase32)}|{a.Algorithm}|{a.Digits}|{(a.Type == OtpType.Totp ? a.Period.ToString() : a.HotpCounter.ToString())}";
 
     public void Dispose()
     {

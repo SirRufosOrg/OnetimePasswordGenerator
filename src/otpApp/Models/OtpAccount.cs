@@ -26,6 +26,13 @@ public class OtpAccount
     public long HotpCounter { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    public static string NormalizeSecret(string secret) =>
+        secret.Trim()
+            .Replace(" ", "")
+            .Replace("-", "")
+            .Replace("=", "")
+            .ToUpperInvariant();
+
     public string ToUri()
     {
         var type = Type == OtpType.Hotp ? "hotp" : "totp";

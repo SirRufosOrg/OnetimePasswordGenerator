@@ -52,7 +52,7 @@ public static class OtpAuthUriParser
             Type = type,
             Issuer = issuer.Trim(),
             Label = label.Trim(),
-            SecretBase32 = secret.Trim().ToUpperInvariant(),
+            SecretBase32 = OtpAccount.NormalizeSecret(secret),
             Algorithm = algo,
             Digits = digits,
             Period = period,

@@ -61,7 +61,7 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
             Type = Type,
             Issuer = Issuer.Trim(),
             Label = Label.Trim(),
-            SecretBase32 = Secret.Trim(),
+            SecretBase32 = OtpAccount.NormalizeSecret(Secret),
             Algorithm = Algorithm,
             Digits = Digits,
             Period = Period,
