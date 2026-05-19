@@ -220,77 +220,69 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <!-- Add Account Dialog Overlay -->
-                <Border IsVisible="{Binding ShowAddDialog}"
-                        Background="#80000000"
-                        CornerRadius="12"
-                        Padding="20"
-                        Margin="0,12,0,0">
-                    <Border Background="{DynamicResource SurfaceCardBrush}"
-                            CornerRadius="12"
-                            Padding="24">
-                        <StackPanel Spacing="16">
-                            <TextBlock Text="{Binding Loc.AddAccountDialogTitle}" Classes="HeaderText"/>
-                            <TextBlock Text="{Binding Loc.AddAccountDialogSubtitle}"
-                                       Classes="SubHeaderText"/>
+                <ContentControl Content="{Binding AddAccountViewModel}"
+                                IsVisible="{Binding ShowAddDialog}"
+                                Margin="0,12,0,0">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="vm:AddAccountViewModel">
+                            <Border Background="#80000000" CornerRadius="12" Padding="20">
+                                <Border Background="{DynamicResource SurfaceCardBrush}"
+                                        CornerRadius="12" Padding="24">
+                                    <StackPanel Spacing="16">
+                                        <TextBlock Text="{Binding Loc.AddAccountDialogTitle}" Classes="HeaderText"/>
+                                        <TextBlock Text="{Binding Loc.AddAccountDialogSubtitle}" Classes="SubHeaderText"/>
 
-                            <TextBox PlaceholderText="{Binding Loc.IssuerPlaceholder}"
-                                     Text="{Binding AddAccountViewModel.Issuer}"
-                                     Classes="UrlTextBox"/>
-                            <TextBox PlaceholderText="{Binding Loc.LabelPlaceholder}"
-                                     Text="{Binding AddAccountViewModel.Label}"
-                                     Classes="UrlTextBox"/>
-                            <TextBox PlaceholderText="{Binding Loc.SecretPlaceholder}"
-                                     Text="{Binding AddAccountViewModel.Secret}"
-                                     Classes="UrlTextBox"/>
+                                        <TextBox PlaceholderText="{Binding Loc.IssuerPlaceholder}"
+                                                 Text="{Binding Issuer}" Classes="UrlTextBox"/>
+                                        <TextBox PlaceholderText="{Binding Loc.LabelPlaceholder}"
+                                                 Text="{Binding Label}" Classes="UrlTextBox"/>
+                                        <TextBox PlaceholderText="{Binding Loc.SecretPlaceholder}"
+                                                 Text="{Binding Secret}" Classes="UrlTextBox"/>
 
-                            <ComboBox ItemsSource="{Binding AddAccountViewModel.Algorithms}"
-                                      SelectedItem="{Binding AddAccountViewModel.Algorithm}"
-                                      Classes="UrlTextBox"
-                                      HorizontalAlignment="Stretch"/>
+                                        <ComboBox ItemsSource="{Binding Algorithms}"
+                                                  SelectedItem="{Binding Algorithm}"
+                                                  Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
 
-                            <ComboBox ItemsSource="{Binding AddAccountViewModel.OtpTypes}"
-                                      SelectedItem="{Binding AddAccountViewModel.Type}"
-                                      Classes="UrlTextBox"
-                                      HorizontalAlignment="Stretch"/>
+                                        <ComboBox ItemsSource="{Binding OtpTypes}"
+                                                  SelectedItem="{Binding Type}"
+                                                  Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                                <NumericUpDown Value="{Binding AddAccountViewModel.Digits}"
-                                               Minimum="6" Maximum="8" Increment="2"
-                                               FormatString="0"
-                                               Classes="UrlTextBox"
-                                               PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
-                                <NumericUpDown Grid.Column="1"
-                                               Value="{Binding AddAccountViewModel.Period}"
-                                               IsVisible="{Binding AddAccountViewModel.IsTotp}"
-                                               Minimum="1" Maximum="3600" Increment="1"
-                                               FormatString="0"
-                                               Classes="UrlTextBox"
-                                               PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
-                                <NumericUpDown Grid.Column="1"
-                                               Value="{Binding AddAccountViewModel.HotpCounter}"
-                                               IsVisible="{Binding AddAccountViewModel.IsTotp, Converter={StaticResource InvertBool}}"
-                                               Minimum="0" Maximum="999999" Increment="1"
-                                               FormatString="0"
-                                               Classes="UrlTextBox"
-                                               PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
-                            </Grid>
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                            <NumericUpDown Value="{Binding Digits}"
+                                                           Minimum="6" Maximum="8" Increment="2"
+                                                           FormatString="0" Classes="UrlTextBox"
+                                                           PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
+                                            <NumericUpDown Grid.Column="1"
+                                                           Value="{Binding Period}"
+                                                           IsVisible="{Binding IsTotp}"
+                                                           Minimum="1" Maximum="3600" Increment="1"
+                                                           FormatString="0" Classes="UrlTextBox"
+                                                           PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
+                                            <NumericUpDown Grid.Column="1"
+                                                           Value="{Binding HotpCounter}"
+                                                           IsVisible="{Binding IsTotp, Converter={StaticResource InvertBool}}"
+                                                           Minimum="0" Maximum="999999" Increment="1"
+                                                           FormatString="0" Classes="UrlTextBox"
+                                                           PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
+                                        </Grid>
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                                <Button Command="{Binding AddAccountViewModel.CancelCommand}"
-                                        Background="{DynamicResource SurfaceSubtleBrush}"
-                                        Foreground="{DynamicResource TextPrimaryBrush}"
-                                        CornerRadius="8"
-                                        Padding="16,8"
-                                        Content="{Binding Loc.Cancel}"/>
-                                <Button Grid.Column="1"
-                                        Command="{Binding AddAccountViewModel.SaveCommand}"
-                                        Classes="PrimaryButton"
-                                        Content="{Binding Loc.Save}"/>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
-                </Border>
+                                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                            <Button Command="{Binding CancelCommand}"
+                                                    Background="{DynamicResource SurfaceSubtleBrush}"
+                                                    Foreground="{DynamicResource TextPrimaryBrush}"
+                                                    CornerRadius="8" Padding="16,8"
+                                                    Content="{Binding Loc.Cancel}"/>
+                                            <Button Grid.Column="1"
+                                                    Command="{Binding SaveCommand}"
+                                                    Classes="PrimaryButton"
+                                                    Content="{Binding Loc.Save}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Border>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
             </StackPanel>
         </ScrollViewer>
     </Grid>
