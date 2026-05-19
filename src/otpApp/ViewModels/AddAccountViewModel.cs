@@ -13,6 +13,8 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
     [Reactive] private int _period = 30;
     [Reactive] private long _hotpCounter;
 
+    [Reactive] private bool _isTotp = true;
+
     public OtpType[] OtpTypes => Enum.GetValues<OtpType>();
     public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
 
@@ -24,6 +26,10 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
 
     public AddAccountViewModel()
     {
+        this.WhenAnyValue(x => x.Type)
+            .Subscribe(t => IsTotp = t == OtpType.Totp)
+            .DisposeWith(_disposables);
+
         var canSave = this.WhenAnyValue(
             x => x.Issuer,
             x => x.Label,

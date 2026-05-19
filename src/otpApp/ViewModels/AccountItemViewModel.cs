@@ -17,6 +17,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     [Reactive] private long _counter;
 
     [Reactive] private bool _isEditing;
+    [Reactive] private bool _isEditTotp = true;
     [Reactive] private string _editIssuer = "";
     [Reactive] private string _editLabel = "";
     [Reactive] private string _editSecret = "";
@@ -73,6 +74,10 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
         NextCodeCommand = ReactiveCommand.Create(AdvanceCounter)
             .Enhance(Loc.NextCode, "NextCode");
+
+        this.WhenAnyValue(x => x.EditType)
+            .Subscribe(t => IsEditTotp = t == OtpType.Totp)
+            .DisposeWith(_disposables);
 
         GenerateInitialCode();
 
