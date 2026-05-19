@@ -124,7 +124,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         account.HotpCounter = item.EditCounter;
 
         _repository.Update(account);
-        item.NotifyAccountUpdated();
+        item.RefreshAfterEdit();
         item.IsEditing = false;
     }
 

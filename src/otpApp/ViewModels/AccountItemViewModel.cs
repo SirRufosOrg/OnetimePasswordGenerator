@@ -6,6 +6,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     private readonly IClipboardService _clipboardService;
     private readonly Action<AccountItemViewModel>? _onCounterAdvanced;
     private readonly CompositeDisposable _disposables = new();
+    private readonly CompositeDisposable _timerDisposables = new();
 
     [Reactive] private OtpAccount _account = default!;
     [Reactive] private string _displayIssuer = "";
@@ -15,6 +16,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     [Reactive] private double _progress;
     [Reactive] private string _progressColorClass = "";
     [Reactive] private long _counter;
+    [Reactive] private bool _isTotp = true;
 
     [Reactive] private bool _isEditing;
     [Reactive] private bool _isEditTotp = true;
@@ -29,7 +31,6 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
     public OtpType[] OtpTypes => Enum.GetValues<OtpType>();
     public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
-    public bool IsTotp => Account.Type == OtpType.Totp;
     public IEnhancedCommand CopyCommand { get; }
     public IEnhancedCommand DeleteCommand { get; }
     public IEnhancedCommand EditCommand { get; }
@@ -49,6 +50,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         _displayIssuer = account.Issuer;
         _displayLabel = account.Label;
         _counter = account.HotpCounter;
+        _isTotp = account.Type == OtpType.Totp;
         _totpService = totpService;
         _clipboardService = clipboardService;
         _onCounterAdvanced = onCounterAdvanced;
@@ -127,12 +129,14 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 
     private void StartTimer()
     {
+        _timerDisposables.Clear();
+
         Observable.Interval(TimeSpan.FromSeconds(1))
             .StartWith(0)
             .Select(_ => _totpService.RemainingSeconds(Account))
             .ObserveOn(ReactiveUI.RxSchedulers.MainThreadScheduler)
             .Subscribe(UpdateRemaining)
-            .DisposeWith(_disposables);
+            .DisposeWith(_timerDisposables);
 
         this.WhenAnyValue(x => x.RemainingSeconds)
             .Subscribe(r =>
@@ -147,7 +151,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
                     _ => ""
                 };
             })
-            .DisposeWith(_disposables);
+            .DisposeWith(_timerDisposables);
     }
 
     private void UpdateRemaining(int seconds)
@@ -159,14 +163,28 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         }
     }
 
-    public void NotifyAccountUpdated()
+    public void RefreshAfterEdit()
     {
         DisplayIssuer = Account.Issuer;
         DisplayLabel = Account.Label;
+        IsTotp = Account.Type == OtpType.Totp;
+
+        if (IsTotp)
+        {
+            CurrentCode = _totpService.GenerateCode(Account);
+            StartTimer();
+        }
+        else
+        {
+            _timerDisposables.Clear();
+            Counter = Account.HotpCounter;
+            CurrentCode = _totpService.GenerateCode(Account, Counter);
+        }
     }
 
     public void Dispose()
     {
+        _timerDisposables.Dispose();
         _disposables.Dispose();
     }
 }
