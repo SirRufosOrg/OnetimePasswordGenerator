@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: 1
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            suffix: windows-x64
+          - os: windows-latest
+            rid: win-arm64
+            suffix: windows-arm64
+          - os: macos-latest
+            rid: osx-x64
+            suffix: macos-x64
+          - os: macos-latest
+            rid: osx-arm64
+            suffix: macos-arm64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore dependencies
+        run: dotnet restore src/otpApp
+
+      - name: Publish
+        run: dotnet publish src/otpApp -c Release -r ${{ matrix.rid }} --self-contained -o publish/${{ matrix.suffix }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: otpApp-${{ matrix.suffix }}
+          path: publish/${{ matrix.suffix }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Create release archives
+        shell: bash
+        run: |
+          for dir in otpApp-*/; do
+            name="${dir%/}"
+            if [ "$RUNNER_OS" = "Windows" ]; then
+              7z a "${name}.zip" "./${dir}*"
+            else
+              zip -r "${name}.zip" "${dir}"
+            fi
+          done
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: otpApp-*.zip
+          generate_release_notes: true
