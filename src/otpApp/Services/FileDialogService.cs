@@ -34,4 +34,34 @@ public class FileDialogService : IFileDialogService
         using var reader = new StreamReader(stream);
         return await reader.ReadToEndAsync();
     }
+
+    public async Task<bool> SaveTextToFileAsync(string content)
+    {
+        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+            return false;
+
+        var window = desktop.MainWindow;
+        if (window is null)
+            return false;
+
+        var file = await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Export Accounts",
+            DefaultExtension = "txt",
+            FileTypeChoices =
+            [
+                new FilePickerFileType("Text Files") { Patterns = ["*.txt"] },
+                new FilePickerFileType("All Files") { Patterns = ["*.*"] },
+            ]
+        });
+
+        if (file is null)
+            return false;
+
+        await using var stream = await file.OpenWriteAsync();
+        using var writer = new StreamWriter(stream);
+        await writer.WriteAsync(content);
+        await writer.FlushAsync();
+        return true;
+    }
 }

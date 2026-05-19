@@ -28,6 +28,7 @@
                     <NativeMenuItem Header="{Binding Loc.ImportFromClipboard}" Command="{Binding ImportFromClipboardCommand}"/>
                     <NativeMenuItemSeparator/>
                     <NativeMenuItem Header="{Binding Loc.MenuImportFile}" Command="{Binding ImportFromFileCommand}"/>
+                    <NativeMenuItem Header="{Binding Loc.MenuExportFile}" Command="{Binding ExportToFileCommand}"/>
                 </NativeMenu>
             </NativeMenuItem>
         </NativeMenu>

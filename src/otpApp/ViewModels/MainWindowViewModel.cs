@@ -26,6 +26,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public IEnhancedCommand ShowAboutCommand { get; }
     public IEnhancedCommand ImportFromClipboardCommand { get; }
     public IEnhancedCommand ImportFromFileCommand { get; }
+    public IEnhancedCommand ExportToFileCommand { get; }
     public AddAccountViewModel AddAccountViewModel { get; private set; }
 
     public MainWindowViewModel(
@@ -63,6 +64,9 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
         ImportFromFileCommand = ReactiveCommand.CreateFromTask(ImportFromFile)
             .Enhance(Loc.MenuImportFile, "ImportFromFile");
+
+        ExportToFileCommand = ReactiveCommand.CreateFromTask(ExportToFile)
+            .Enhance(Loc.MenuExportFile, "ExportToFile");
 
         this.WhenAnyValue(x => x.SelectedCultureIndex)
             .Subscribe(index => Loc.CurrentCulture = index == 0 ? "en" : "de")
@@ -218,13 +222,28 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         }
     }
 
-    private void ShowImportError()
+        private void ShowImportError()
     {
         StatusMessage = Loc.ImportParseError;
         Observable.Timer(TimeSpan.FromSeconds(3))
             .ObserveOn(ReactiveUI.RxSchedulers.MainThreadScheduler)
             .Subscribe(_ => StatusMessage = "")
             .DisposeWith(_disposables);
+    }
+
+    private async Task ExportToFile()
+    {
+        var accounts = _repository.GetAll().ToList();
+        if (accounts.Count == 0)
+        {
+            ShowStatusMessage(Loc.NoAccountsToExport);
+            return;
+        }
+
+        var lines = string.Join(Environment.NewLine, accounts.Select(a => a.ToUri()));
+        var success = await _fileDialogService.SaveTextToFileAsync(lines);
+        if (success)
+            ShowStatusMessage($"{accounts.Count} {Loc.Exported}");
     }
 
     private void ShowStatusMessage(string message)

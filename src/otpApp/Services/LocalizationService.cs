@@ -61,11 +61,14 @@ public class LocalizationService : INotifyPropertyChanged
             ["AboutTooltip"] = "About",
             ["MenuNewAccount"] = "New",
             ["MenuImportFile"] = "Import...",
+            ["MenuExportFile"] = "Export...",
             ["MenuFile"] = "File",
             ["MenuServices"] = "Services",
             ["MenuHelp"] = "Help",
             ["Seconds"] = "s",
             ["RemainingSeconds"] = "s",
+            ["Exported"] = "exported",
+            ["NoAccountsToExport"] = "No accounts to export",
         },
         ["de"] = new()
         {
@@ -112,11 +115,14 @@ public class LocalizationService : INotifyPropertyChanged
             ["AboutTooltip"] = "Über",
             ["MenuNewAccount"] = "Neu",
             ["MenuImportFile"] = "Importieren...",
+            ["MenuExportFile"] = "Exportieren...",
             ["MenuFile"] = "Datei",
             ["MenuServices"] = "Dienste",
             ["MenuHelp"] = "Hilfe",
             ["Seconds"] = "s",
             ["RemainingSeconds"] = "s",
+            ["Exported"] = "exportiert",
+            ["NoAccountsToExport"] = "Keine Konten zum Exportieren",
         }
     };
 
@@ -169,6 +175,7 @@ public class LocalizationService : INotifyPropertyChanged
     public string CmdAbout => GetString( "CmdAbout" );
     public string MenuNewAccount => GetString();
     public string MenuImportFile => GetString();
+    public string MenuExportFile => GetString();
     public string MenuFile => GetString( "MenuFile" );
     public string MenuServices => GetString( "MenuServices" );
     public string MenuHelp => GetString( "MenuHelp" );
@@ -183,6 +190,8 @@ public class LocalizationService : INotifyPropertyChanged
     public string Imported => GetString();
     public string DuplicatesSkipped => GetString();
     public string AboutTooltip => GetString( "AboutTooltip" );
+    public string Exported => GetString();
+    public string NoAccountsToExport => GetString();
 
     private string GetString( [CallerMemberName] string key = "" )
     {
