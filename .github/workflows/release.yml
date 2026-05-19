@@ -15,26 +15,24 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
-            rid: win-x64
+          - rid: win-x64
             suffix: windows-x64
-          - os: windows-latest
-            rid: win-arm64
+          - rid: win-arm64
             suffix: windows-arm64
-          - os: macos-latest
-            rid: osx-x64
+          - rid: osx-x64
             suffix: macos-x64
-          - os: macos-latest
-            rid: osx-arm64
+          - rid: osx-arm64
             suffix: macos-arm64
 
-    runs-on: ${{ matrix.os }}
+    runs-on: [self-hosted, Linux]
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
+        env:
+          DOTNET_INSTALL_DIR: "./.dotnet"
         with:
           global-json-file: global.json
 
@@ -96,7 +94,7 @@ jobs:
 
   release:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     permissions:
       contents: write
 
