@@ -68,7 +68,8 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         EditCommand = ReactiveCommand.Create(StartEdit)
             .Enhance(Loc.CmdEdit, "EditAccount");
 
-        SaveEditCommand = ReactiveCommand.Create(() => onEdit(this))
+        var canSave = this.WhenAnyValue(x => x.EditDigits, d => d == 6 || d == 8);
+        SaveEditCommand = ReactiveCommand.Create(() => onEdit(this), canSave)
             .Enhance(Loc.CmdSave, "SaveAccountEdit");
 
         CancelEditCommand = ReactiveCommand.Create(() => IsEditing = false)
