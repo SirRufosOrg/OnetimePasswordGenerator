@@ -22,7 +22,13 @@ public class LocalizationService : INotifyPropertyChanged
             ["AppSubtitle"] = "Time-based One-Time Passwords",
             ["AddAccountButton"] = "+ Add Account",
             ["AddAccountDialogTitle"] = "Add Account",
-            ["AddAccountDialogSubtitle"] = "Enter your TOTP account details below.",
+            ["AddAccountDialogSubtitle"] = "Enter your account details below.",
+            ["OtpType"] = "Type",
+            ["Totp"] = "TOTP",
+            ["Hotp"] = "HOTP",
+            ["Counter"] = "Counter",
+            ["NextCode"] = "Next",
+            ["CounterPlaceholder"] = "Initial Counter",
             ["IssuerPlaceholder"] = "Issuer (e.g. GitHub)",
             ["LabelPlaceholder"] = "Label (e.g. user@email.com)",
             ["SecretPlaceholder"] = "Secret Key (Base32)",
@@ -61,7 +67,13 @@ public class LocalizationService : INotifyPropertyChanged
             ["AppSubtitle"] = "Zeitbasierte Einmalpasswörter",
             ["AddAccountButton"] = "+ Konto hinzufügen",
             ["AddAccountDialogTitle"] = "Konto hinzufügen",
-            ["AddAccountDialogSubtitle"] = "Geben Sie unten Ihre TOTP-Kontodaten ein.",
+            ["AddAccountDialogSubtitle"] = "Geben Sie unten Ihre Kontodaten ein.",
+            ["OtpType"] = "Typ",
+            ["Totp"] = "TOTP",
+            ["Hotp"] = "HOTP",
+            ["Counter"] = "Zähler",
+            ["NextCode"] = "Nächster",
+            ["CounterPlaceholder"] = "Startzähler",
             ["IssuerPlaceholder"] = "Anbieter (z.B. GitHub)",
             ["LabelPlaceholder"] = "Bezeichnung (z.B. benutzer@email.de)",
             ["SecretPlaceholder"] = "Geheimschlüssel (Base32)",
@@ -146,6 +158,12 @@ public class LocalizationService : INotifyPropertyChanged
     public string MenuFile => GetString( "MenuFile" );
     public string MenuServices => GetString( "MenuServices" );
     public string MenuHelp => GetString( "MenuHelp" );
+    public string OtpType => GetString();
+    public string Totp => GetString();
+    public string Hotp => GetString();
+    public string Counter => GetString();
+    public string NextCode => GetString();
+    public string CounterPlaceholder => GetString();
     public string AboutTooltip => GetString( "AboutTooltip" );
 
     private string GetString( [CallerMemberName] string key = "" )
