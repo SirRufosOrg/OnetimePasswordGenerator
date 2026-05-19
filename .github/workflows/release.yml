@@ -72,8 +72,7 @@ jobs:
           BUNDLE="publish/otpApp-${{ matrix.suffix }}.app"
           mkdir -p "$BUNDLE/Contents/MacOS" "$BUNDLE/Contents/Resources"
           cp -R publish/raw/ "$BUNDLE/Contents/MacOS/"
-          sed "s/VERSION/$VERSION/g" src/otpApp/Platform/macOS/Info.plist > "$BUNDLE/Contents/Info.plist"
-          chmod +x "$BUNDLE/Contents/MacOS/otpApp"
+          sed "s/VERSION/$VERSION/g" src/otpApp/Platform/macOS/Info.plist > "$BUNDLE/Contents/Info.plist"          
 
       - name: Prepare upload
         id: prep
