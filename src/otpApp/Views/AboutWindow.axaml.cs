@@ -1,7 +1,6 @@
-using System.Reflection;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using otpApp.ViewModels;
 
 namespace otpApp.Views;
 
@@ -10,14 +9,16 @@ public partial class AboutWindow : Window
     public AboutWindow()
     {
         InitializeComponent();
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        VersionText.Text = version is not null
-            ? $"v{version.Major}.{version.Minor}.{version.Build}"
-            : "v1.0.0";
-    }
 
-    private void OnCloseClick(object? sender, RoutedEventArgs e)
-    {
-        Close();
+        if (Design.IsDesignMode)
+            return;
+
+        DataContextChanged += (_, _) =>
+        {
+            if (DataContext is AboutWindowViewModel vm)
+            {
+                vm.RequestClose += () => Close();
+            }
+        };
     }
 }

@@ -1,6 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:otpApp.ViewModels"
         x:Class="otpApp.Views.AboutWindow"
+        x:DataType="vm:AboutWindowViewModel"
         Title="About OTP App"
         Width="360"
         Height="280"
@@ -11,7 +13,7 @@
         <StackPanel VerticalAlignment="Center" Spacing="12">
             <TextBlock Text="OTP App" Classes="HeaderText"
                        HorizontalAlignment="Center"/>
-            <TextBlock x:Name="VersionText"
+            <TextBlock Text="{Binding Version}"
                        Classes="SubHeaderText"
                        HorizontalAlignment="Center"/>
             <TextBlock Text="Time-based One-Time Passwords"
@@ -25,8 +27,8 @@
                        TextWrapping="Wrap"
                        TextAlignment="Center"
                        FontSize="13"/>
-            <Button Content="Close"
-                    Click="OnCloseClick"
+            <Button Command="{Binding CloseCommand}"
+                    Content="{Binding Loc.Cancel, FallbackValue=Close}"
                     HorizontalAlignment="Center"
                     Background="{DynamicResource SurfaceSubtleBrush}"
                     Foreground="{DynamicResource TextPrimaryBrush}"

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using otpApp.ViewModels;
 
 namespace otpApp.Services;
 
@@ -9,7 +10,8 @@ public class DialogService : IDialogService
     {
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var window = new Views.AboutWindow();
+            var vm = new AboutWindowViewModel();
+            var window = new Views.AboutWindow { DataContext = vm };
             window.ShowDialog(desktop.MainWindow!);
         }
     }
