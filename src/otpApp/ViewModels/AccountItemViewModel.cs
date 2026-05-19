@@ -4,6 +4,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
 {
     private readonly TotpService _totpService;
     private readonly IClipboardService _clipboardService;
+    private readonly Action<AccountItemViewModel>? _onCounterAdvanced;
     private readonly CompositeDisposable _disposables = new();
 
     [Reactive] private OtpAccount _account = default!;
@@ -13,39 +14,45 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
     [Reactive] private int _remainingSeconds;
     [Reactive] private double _progress;
     [Reactive] private string _progressColorClass = "";
+    [Reactive] private long _counter;
 
     [Reactive] private bool _isEditing;
     [Reactive] private string _editIssuer = "";
     [Reactive] private string _editLabel = "";
     [Reactive] private string _editSecret = "";
+    [Reactive] private OtpType _editType;
     [Reactive] private OtpAlgorithm _editAlgorithm;
     [Reactive] private int _editDigits;
     [Reactive] private int _editPeriod;
+    [Reactive] private long _editCounter;
 
+    public OtpType[] OtpTypes => Enum.GetValues<OtpType>();
     public OtpAlgorithm[] Algorithms => Enum.GetValues<OtpAlgorithm>();
+    public bool IsTotp => Account.Type == OtpType.Totp;
     public IEnhancedCommand CopyCommand { get; }
     public IEnhancedCommand DeleteCommand { get; }
     public IEnhancedCommand EditCommand { get; }
     public IEnhancedCommand SaveEditCommand { get; }
     public IEnhancedCommand CancelEditCommand { get; }
+    public IEnhancedCommand NextCodeCommand { get; }
 
     public AccountItemViewModel(
         OtpAccount account,
         TotpService totpService,
         IClipboardService clipboardService,
         Action<AccountItemViewModel> onDelete,
-        Action<AccountItemViewModel> onEdit)
+        Action<AccountItemViewModel> onEdit,
+        Action<AccountItemViewModel>? onCounterAdvanced = null)
     {
         _account = account;
         _displayIssuer = account.Issuer;
         _displayLabel = account.Label;
+        _counter = account.HotpCounter;
         _totpService = totpService;
         _clipboardService = clipboardService;
+        _onCounterAdvanced = onCounterAdvanced;
 
-        CopyCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                await _clipboardService.CopyToClipboardAsync(CurrentCode);
-            })
+        CopyCommand = ReactiveCommand.CreateFromTask(CopyCode)
             .Enhance(Loc.CmdCopy, "CopyCode");
 
         CopyCommand.ThrownExceptions
@@ -55,16 +62,7 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         DeleteCommand = ReactiveCommand.Create(() => onDelete(this))
             .Enhance(Loc.CmdDelete, "DeleteAccount");
 
-        EditCommand = ReactiveCommand.Create(() =>
-        {
-            EditIssuer = Account.Issuer;
-            EditLabel = Account.Label;
-            EditSecret = Account.SecretBase32;
-            EditAlgorithm = Account.Algorithm;
-            EditDigits = Account.Digits;
-            EditPeriod = Account.Period;
-            IsEditing = true;
-        })
+        EditCommand = ReactiveCommand.Create(StartEdit)
             .Enhance(Loc.CmdEdit, "EditAccount");
 
         SaveEditCommand = ReactiveCommand.Create(() => onEdit(this))
@@ -73,8 +71,57 @@ public partial class AccountItemViewModel : ViewModelBase, IDisposable
         CancelEditCommand = ReactiveCommand.Create(() => IsEditing = false)
             .Enhance(Loc.CmdCancel, "CancelEdit");
 
-        CurrentCode = _totpService.GenerateCode(Account);
+        NextCodeCommand = ReactiveCommand.Create(AdvanceCounter)
+            .Enhance(Loc.NextCode, "NextCode");
 
+        GenerateInitialCode();
+
+        if (IsTotp)
+        {
+            StartTimer();
+        }
+    }
+
+    private async Task CopyCode()
+    {
+        await _clipboardService.CopyToClipboardAsync(CurrentCode);
+    }
+
+    private void StartEdit()
+    {
+        EditIssuer = Account.Issuer;
+        EditLabel = Account.Label;
+        EditSecret = Account.SecretBase32;
+        EditType = Account.Type;
+        EditAlgorithm = Account.Algorithm;
+        EditDigits = Account.Digits;
+        EditPeriod = Account.Period;
+        EditCounter = Account.HotpCounter;
+        IsEditing = true;
+    }
+
+    private void AdvanceCounter()
+    {
+        Counter++;
+        Account.HotpCounter = Counter;
+        CurrentCode = _totpService.GenerateCode(Account, Counter);
+        _onCounterAdvanced?.Invoke(this);
+    }
+
+    private void GenerateInitialCode()
+    {
+        if (IsTotp)
+        {
+            CurrentCode = _totpService.GenerateCode(Account);
+        }
+        else
+        {
+            CurrentCode = _totpService.GenerateCode(Account, Counter);
+        }
+    }
+
+    private void StartTimer()
+    {
         Observable.Interval(TimeSpan.FromSeconds(1))
             .StartWith(0)
             .Select(_ => _totpService.RemainingSeconds(Account))
