@@ -84,6 +84,10 @@ public class LocalizationService : INotifyPropertyChanged
             ["AboutAppName"] = "OTP App",
             ["AboutSubtitle"] = "Time-based One-Time Passwords",
             ["AboutDescription"] = "A simple TOTP authenticator app built with Avalonia UI.",
+            ["ImportFileDialogTitle"] = "Import Accounts",
+            ["ExportFileDialogTitle"] = "Export Accounts",
+            ["TextFiles"] = "Text Files",
+            ["AllFiles"] = "All Files",
         },
         ["de"] = new()
         {
@@ -153,6 +157,10 @@ public class LocalizationService : INotifyPropertyChanged
             ["AboutAppName"] = "OTP App",
             ["AboutSubtitle"] = "Zeitbasierte Einmalpasswörter",
             ["AboutDescription"] = "Eine einfache TOTP-Authenticator-App mit Avalonia UI.",
+            ["ImportFileDialogTitle"] = "Konten importieren",
+            ["ExportFileDialogTitle"] = "Konten exportieren",
+            ["TextFiles"] = "Textdateien",
+            ["AllFiles"] = "Alle Dateien",
         }
     };
 
@@ -237,6 +245,10 @@ public class LocalizationService : INotifyPropertyChanged
     public string AboutAppName => GetString();
     public string AboutSubtitle => GetString();
     public string AboutDescription => GetString();
+    public string ImportFileDialogTitle => GetString();
+    public string ExportFileDialogTitle => GetString();
+    public string TextFiles => GetString();
+    public string AllFiles => GetString();
 
     private string GetString( [CallerMemberName] string key = "" )
     {

@@ -6,6 +6,13 @@ namespace otpApp.Services;
 
 public class FileDialogService : IFileDialogService
 {
+    private readonly LocalizationService _loc;
+
+    public FileDialogService(LocalizationService loc)
+    {
+        _loc = loc;
+    }
+
     public async Task<string?> OpenAndReadTextFileAsync()
     {
         if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
@@ -17,12 +24,12 @@ public class FileDialogService : IFileDialogService
 
         var files = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Import Accounts",
+            Title = _loc.ImportFileDialogTitle,
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType("Text Files") { Patterns = ["*.txt"] },
-                new FilePickerFileType("All Files") { Patterns = ["*.*"] },
+                new FilePickerFileType(_loc.TextFiles) { Patterns = ["*.txt"] },
+                new FilePickerFileType(_loc.AllFiles) { Patterns = ["*.*"] },
             ]
         });
 
@@ -46,12 +53,12 @@ public class FileDialogService : IFileDialogService
 
         var file = await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
-            Title = "Export Accounts",
+            Title = _loc.ExportFileDialogTitle,
             DefaultExtension = "txt",
             FileTypeChoices =
             [
-                new FilePickerFileType("Text Files") { Patterns = ["*.txt"] },
-                new FilePickerFileType("All Files") { Patterns = ["*.*"] },
+                new FilePickerFileType(_loc.TextFiles) { Patterns = ["*.txt"] },
+                new FilePickerFileType(_loc.AllFiles) { Patterns = ["*.*"] },
             ]
         });
 
