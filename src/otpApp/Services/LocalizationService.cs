@@ -69,6 +69,7 @@ public class LocalizationService : INotifyPropertyChanged
             ["RemainingSeconds"] = "s",
             ["Exported"] = "exported",
             ["NoAccountsToExport"] = "No accounts to export",
+            ["DuplicateAccount"] = "An account with these details already exists",
         },
         ["de"] = new()
         {
@@ -123,6 +124,7 @@ public class LocalizationService : INotifyPropertyChanged
             ["RemainingSeconds"] = "s",
             ["Exported"] = "exportiert",
             ["NoAccountsToExport"] = "Keine Konten zum Exportieren",
+            ["DuplicateAccount"] = "Ein Konto mit diesen Daten existiert bereits",
         }
     };
 
@@ -192,6 +194,7 @@ public class LocalizationService : INotifyPropertyChanged
     public string AboutTooltip => GetString( "AboutTooltip" );
     public string Exported => GetString();
     public string NoAccountsToExport => GetString();
+    public string DuplicateAccount => GetString();
 
     private string GetString( [CallerMemberName] string key = "" )
     {

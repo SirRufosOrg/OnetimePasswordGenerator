@@ -93,6 +93,16 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private async Task OnAccountSaved(IInteractionContext<OtpAccount, Unit> ctx)
     {
         var account = ctx.Input;
+
+        var existing = _repository.GetAll();
+        var key = GetAccountKey(account);
+        if (existing.Any(a => GetAccountKey(a) == key))
+        {
+            ShowStatusMessage(Loc.DuplicateAccount);
+            ctx.SetOutput(Unit.Default);
+            return;
+        }
+
         _repository.Insert(account);
         ShowAddDialog = false;
         LoadAccounts();
