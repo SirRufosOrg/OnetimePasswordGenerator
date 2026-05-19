@@ -36,6 +36,11 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Setup NODE
+        uses: actions/setup-node@v4
+        with: 
+          node-version: 24
+
       - name: Restore dependencies
         run: dotnet restore src/otpApp
 
@@ -69,20 +74,28 @@ jobs:
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          BUNDLE="publish/otpApp-${{ matrix.suffix }}.app"
+          BUNDLE="publish/otpApp.app"
           mkdir -p "$BUNDLE/Contents/MacOS" "$BUNDLE/Contents/Resources"
           cp -R publish/raw/ "$BUNDLE/Contents/MacOS/"
           sed "s/VERSION/$VERSION/g" src/otpApp/Platform/macOS/Info.plist > "$BUNDLE/Contents/Info.plist"          
 
+      - name: Install ZIP
+        run: |-
+          apt update
+          apt install zip           
+      
       - name: Prepare upload
         id: prep
         shell: bash
         run: |
-          if [ -d "publish/otpApp-${{ matrix.suffix }}.app" ]; then
-            echo "path=publish/otpApp-${{ matrix.suffix }}.app" >> "$GITHUB_OUTPUT"
+          if [ -d "publish/otpApp.app" ]; then
+            cd publish
+            zip -r "otpApp-${{ matrix.suffix }}.app.zip" "otpApp.app"
+            echo "path=publish/otpApp-${{ matrix.suffix }}.app.zip" >> "$GITHUB_OUTPUT"
           else
-            mv publish/raw "publish/otpApp-${{ matrix.suffix }}"
-            echo "path=publish/otpApp-${{ matrix.suffix }}" >> "$GITHUB_OUTPUT"
+            cd publish
+            zip -r "otpApp-${{ matrix.suffix }}.zip" "otpApp"
+            echo "path=publish/otpApp-${{ matrix.suffix }}.zip" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload artifact
