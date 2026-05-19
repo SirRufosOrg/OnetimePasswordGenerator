@@ -72,6 +72,14 @@ public class LocalizationService : INotifyPropertyChanged
             ["DuplicateAccount"] = "An account with these details already exists",
             ["ConfirmDeleteMessage"] = "Delete this account?",
             ["ConfirmDeleteConfirm"] = "Delete",
+            ["IssuerTooltip"] = "The service or website name (e.g. GitHub, Google)",
+            ["LabelTooltip"] = "Your username or email for this account",
+            ["SecretTooltip"] = "The Base32-encoded secret key from the provider",
+            ["AlgorithmTooltip"] = "Hash algorithm used for code generation",
+            ["DigitsTooltip"] = "Number of digits in the generated code (6 or 8)",
+            ["PeriodTooltip"] = "Time interval in seconds between code changes",
+            ["CounterTooltip"] = "Current counter value for HOTP",
+            ["TypeTooltip"] = "One-time password type: TOTP (time-based) or HOTP (counter-based)",
         },
         ["de"] = new()
         {
@@ -129,6 +137,14 @@ public class LocalizationService : INotifyPropertyChanged
             ["DuplicateAccount"] = "Ein Konto mit diesen Daten existiert bereits",
             ["ConfirmDeleteMessage"] = "Dieses Konto löschen?",
             ["ConfirmDeleteConfirm"] = "Löschen",
+            ["IssuerTooltip"] = "Der Dienst- oder Webseitenname (z.B. GitHub, Google)",
+            ["LabelTooltip"] = "Dein Benutzername oder deine E-Mail für dieses Konto",
+            ["SecretTooltip"] = "Der Base32-codierte geheime Schlüssel vom Anbieter",
+            ["AlgorithmTooltip"] = "Hash-Algorithmus zur Code-Generierung",
+            ["DigitsTooltip"] = "Anzahl der Stellen des generierten Codes (6 oder 8)",
+            ["PeriodTooltip"] = "Zeitintervall in Sekunden zwischen Code-Änderungen",
+            ["CounterTooltip"] = "Aktueller Zählerwert für HOTP",
+            ["TypeTooltip"] = "Einmalpasswort-Typ: TOTP (zeitbasiert) oder HOTP (zählerbasiert)",
         }
     };
 
@@ -201,6 +217,14 @@ public class LocalizationService : INotifyPropertyChanged
     public string DuplicateAccount => GetString();
     public string ConfirmDeleteMessage => GetString();
     public string ConfirmDeleteConfirm => GetString();
+    public string IssuerTooltip => GetString();
+    public string LabelTooltip => GetString();
+    public string SecretTooltip => GetString();
+    public string AlgorithmTooltip => GetString();
+    public string DigitsTooltip => GetString();
+    public string PeriodTooltip => GetString();
+    public string CounterTooltip => GetString();
+    public string TypeTooltip => GetString();
 
     private string GetString( [CallerMemberName] string key = "" )
     {

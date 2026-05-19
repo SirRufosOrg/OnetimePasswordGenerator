@@ -162,21 +162,26 @@
                                     <StackPanel IsVisible="{Binding IsEditing}" Spacing="8">
                                         <TextBox Text="{Binding EditIssuer}"
                                                  PlaceholderText="{Binding Loc.IssuerPlaceholder}"
+                                                 ToolTip.Tip="{Binding Loc.IssuerTooltip}"
                                                  Classes="UrlTextBox"/>
                                         <TextBox Text="{Binding EditLabel}"
                                                  PlaceholderText="{Binding Loc.LabelPlaceholder}"
+                                                 ToolTip.Tip="{Binding Loc.LabelTooltip}"
                                                  Classes="UrlTextBox"/>
                                         <TextBox Text="{Binding EditSecret}"
                                                  PlaceholderText="{Binding Loc.SecretPlaceholder}"
+                                                 ToolTip.Tip="{Binding Loc.SecretTooltip}"
                                                  Classes="UrlTextBox"/>
 
                                         <ComboBox ItemsSource="{Binding Algorithms}"
                                                   SelectedItem="{Binding EditAlgorithm}"
+                                                  ToolTip.Tip="{Binding Loc.AlgorithmTooltip}"
                                                   Classes="UrlTextBox"
                                                   HorizontalAlignment="Stretch"/>
 
                                         <ComboBox ItemsSource="{Binding OtpTypes}"
                                                   SelectedItem="{Binding EditType}"
+                                                  ToolTip.Tip="{Binding Loc.TypeTooltip}"
                                                   Classes="UrlTextBox"
                                                   HorizontalAlignment="Stretch"/>
 
@@ -184,6 +189,7 @@
                                             <NumericUpDown Value="{Binding EditDigits}"
                                                            Minimum="6" Maximum="8" Increment="2"
                                                            FormatString="0"
+                                                           ToolTip.Tip="{Binding Loc.DigitsTooltip}"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
                                             <NumericUpDown Grid.Column="1"
@@ -191,6 +197,7 @@
                                                            IsVisible="{Binding IsEditTotp}"
                                                            Minimum="1" Maximum="3600" Increment="1"
                                                            FormatString="0"
+                                                           ToolTip.Tip="{Binding Loc.PeriodTooltip}"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
                                             <NumericUpDown Grid.Column="1"
@@ -198,6 +205,7 @@
                                                            IsVisible="{Binding IsEditTotp, Converter={StaticResource InvertBool}}"
                                                            Minimum="0" Maximum="999999" Increment="1"
                                                            FormatString="0"
+                                                           ToolTip.Tip="{Binding Loc.CounterTooltip}"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
                                         </Grid>
@@ -233,36 +241,50 @@
                                         <TextBlock Text="{Binding Loc.AddAccountDialogSubtitle}" Classes="SubHeaderText"/>
 
                                         <TextBox PlaceholderText="{Binding Loc.IssuerPlaceholder}"
-                                                 Text="{Binding Issuer}" Classes="UrlTextBox"/>
+                                                 Text="{Binding Issuer}"
+                                                 ToolTip.Tip="{Binding Loc.IssuerTooltip}"
+                                                 Classes="UrlTextBox"/>
                                         <TextBox PlaceholderText="{Binding Loc.LabelPlaceholder}"
-                                                 Text="{Binding Label}" Classes="UrlTextBox"/>
+                                                 Text="{Binding Label}"
+                                                 ToolTip.Tip="{Binding Loc.LabelTooltip}"
+                                                 Classes="UrlTextBox"/>
                                         <TextBox PlaceholderText="{Binding Loc.SecretPlaceholder}"
-                                                 Text="{Binding Secret}" Classes="UrlTextBox"/>
+                                                 Text="{Binding Secret}"
+                                                 ToolTip.Tip="{Binding Loc.SecretTooltip}"
+                                                 Classes="UrlTextBox"/>
 
                                         <ComboBox ItemsSource="{Binding Algorithms}"
                                                   SelectedItem="{Binding Algorithm}"
+                                                  ToolTip.Tip="{Binding Loc.AlgorithmTooltip}"
                                                   Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
 
                                         <ComboBox ItemsSource="{Binding OtpTypes}"
                                                   SelectedItem="{Binding Type}"
+                                                  ToolTip.Tip="{Binding Loc.TypeTooltip}"
                                                   Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
 
                                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                             <NumericUpDown Value="{Binding Digits}"
                                                            Minimum="6" Maximum="8" Increment="2"
-                                                           FormatString="0" Classes="UrlTextBox"
+                                                           FormatString="0"
+                                                           ToolTip.Tip="{Binding Loc.DigitsTooltip}"
+                                                           Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
                                             <NumericUpDown Grid.Column="1"
                                                            Value="{Binding Period}"
                                                            IsVisible="{Binding IsTotp}"
                                                            Minimum="1" Maximum="3600" Increment="1"
-                                                           FormatString="0" Classes="UrlTextBox"
+                                                           FormatString="0"
+                                                           ToolTip.Tip="{Binding Loc.PeriodTooltip}"
+                                                           Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.PeriodPlaceholder}"/>
                                             <NumericUpDown Grid.Column="1"
                                                            Value="{Binding HotpCounter}"
                                                            IsVisible="{Binding IsTotp, Converter={StaticResource InvertBool}}"
                                                            Minimum="0" Maximum="999999" Increment="1"
-                                                           FormatString="0" Classes="UrlTextBox"
+                                                           FormatString="0"
+                                                           ToolTip.Tip="{Binding Loc.CounterTooltip}"
+                                                           Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.CounterPlaceholder}"/>
                                         </Grid>
 
