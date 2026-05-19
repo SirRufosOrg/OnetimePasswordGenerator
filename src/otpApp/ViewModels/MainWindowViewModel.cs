@@ -9,6 +9,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly TotpService _totpService;
     private readonly IClipboardService _clipboardService;
     private readonly IDialogService _dialogService;
+    private readonly IFileDialogService _fileDialogService;
     private readonly SourceList<AccountItemViewModel> _accountsSource = new();
     private readonly CompositeDisposable _disposables = new();
     private readonly ReadOnlyObservableCollection<AccountItemViewModel> _accounts;
@@ -24,6 +25,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
     public IEnhancedCommand ShowAddCommand { get; }
     public IEnhancedCommand ShowAboutCommand { get; }
     public IEnhancedCommand ImportFromClipboardCommand { get; }
+    public IEnhancedCommand ImportFromFileCommand { get; }
     public AddAccountViewModel AddAccountViewModel { get; private set; }
 
     public MainWindowViewModel(
@@ -31,12 +33,14 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         TotpService totpService,
         AddAccountViewModel addAccountViewModel,
         IClipboardService clipboardService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IFileDialogService fileDialogService)
     {
         _repository = repository;
         _totpService = totpService;
         _clipboardService = clipboardService;
         _dialogService = dialogService;
+        _fileDialogService = fileDialogService;
         AddAccountViewModel = addAccountViewModel;
 
         SubscribeToAddDialog(AddAccountViewModel);
@@ -56,6 +60,9 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
 
         ImportFromClipboardCommand = ReactiveCommand.CreateFromTask(ImportFromClipboard)
             .Enhance(Loc.ImportFromClipboard, "ImportFromClipboard");
+
+        ImportFromFileCommand = ReactiveCommand.CreateFromTask(ImportFromFile)
+            .Enhance(Loc.MenuImportFile, "ImportFromFile");
 
         this.WhenAnyValue(x => x.SelectedCultureIndex)
             .Subscribe(index => Loc.CurrentCulture = index == 0 ? "en" : "de")
@@ -158,9 +165,48 @@ public partial class MainWindowViewModel : ViewModelBase, IDisposable
         ShowAddDialog = true;
     }
 
+    private async Task ImportFromFile()
+    {
+        var content = await _fileDialogService.OpenAndReadTextFileAsync();
+        if (content is null)
+            return;
+
+        var lines = content.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        var imported = 0;
+
+        foreach (var line in lines)
+        {
+            var parsed = OtpAuthUriParser.Parse(line);
+            if (parsed is not null)
+            {
+                _repository.Insert(parsed);
+                imported++;
+            }
+        }
+
+        if (imported > 0)
+        {
+            LoadAccounts();
+            ShowStatusMessage($"{imported} accounts imported");
+        }
+        else
+        {
+            ShowImportError();
+        }
+    }
+
     private void ShowImportError()
     {
         StatusMessage = Loc.ImportParseError;
+        Observable.Timer(TimeSpan.FromSeconds(3))
+            .ObserveOn(ReactiveUI.RxSchedulers.MainThreadScheduler)
+            .Subscribe(_ => StatusMessage = "")
+            .DisposeWith(_disposables);
+    }
+
+    private void ShowStatusMessage(string message)
+    {
+        StatusMessage = message;
         Observable.Timer(TimeSpan.FromSeconds(3))
             .ObserveOn(ReactiveUI.RxSchedulers.MainThreadScheduler)
             .Subscribe(_ => StatusMessage = "")

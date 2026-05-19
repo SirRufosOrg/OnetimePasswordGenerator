@@ -20,6 +20,7 @@ public static class CompositionRoot
             .AddSingleton<TotpService>()
             .AddSingleton<IClipboardService, ClipboardService>()
             .AddSingleton<IDialogService, DialogService>()
+            .AddSingleton<IFileDialogService, FileDialogService>()
             .AddTransient<AddAccountViewModel>()
             .AddSingleton<MainWindowViewModel>();
 
