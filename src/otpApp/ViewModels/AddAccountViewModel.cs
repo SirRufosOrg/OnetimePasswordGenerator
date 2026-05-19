@@ -38,12 +38,12 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
             x => x.Period,
             x => x.Type,
             x => x.HotpCounter,
-            (issuer, label, secret, digits, period, type, counter) =>
-                !string.IsNullOrWhiteSpace(issuer) &&
-                !string.IsNullOrWhiteSpace(label) &&
-                !string.IsNullOrWhiteSpace(secret) &&
-                digits > 0 &&
-                (type == OtpType.Hotp || period > 0)
+                (issuer, label, secret, digits, period, type, _) =>
+                    !string.IsNullOrWhiteSpace(issuer) &&
+                    !string.IsNullOrWhiteSpace(label) &&
+                    !string.IsNullOrWhiteSpace(secret) &&
+                    (digits == 6 || digits == 8) &&
+                    (type == OtpType.Hotp || period > 0)
         );
 
         SaveCommand = ReactiveCommand.Create(Save, canSave)

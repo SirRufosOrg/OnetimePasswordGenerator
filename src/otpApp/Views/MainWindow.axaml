@@ -161,7 +161,7 @@
 
                                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                             <NumericUpDown Value="{Binding EditDigits}"
-                                                           Minimum="1" Maximum="10" Increment="1"
+                                                           Minimum="6" Maximum="8" Increment="2"
                                                            FormatString="0"
                                                            Classes="UrlTextBox"
                                                            PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
@@ -235,7 +235,7 @@
 
                             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                 <NumericUpDown Value="{Binding AddAccountViewModel.Digits}"
-                                               Minimum="1" Maximum="10" Increment="1"
+                                               Minimum="6" Maximum="8" Increment="2"
                                                FormatString="0"
                                                Classes="UrlTextBox"
                                                PlaceholderText="{Binding Loc.DigitsPlaceholder}"/>
