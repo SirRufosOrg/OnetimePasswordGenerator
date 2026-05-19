@@ -44,12 +44,13 @@ public class TotpService
 
     private static byte[] ComputeHmac(byte[] secret, byte[] counter, OtpAlgorithm algorithm)
     {
-        return algorithm switch
+        using var hmac = algorithm switch
         {
-            OtpAlgorithm.SHA256 => new HMACSHA256(secret).ComputeHash(counter),
-            OtpAlgorithm.SHA512 => new HMACSHA512(secret).ComputeHash(counter),
-            _ => new HMACSHA1(secret).ComputeHash(counter)
+            OtpAlgorithm.SHA256 => (HMAC)new HMACSHA256(secret),
+            OtpAlgorithm.SHA512 => new HMACSHA512(secret),
+            _ => new HMACSHA1(secret)
         };
+        return hmac.ComputeHash(counter);
     }
 
     private static string Truncate(byte[] hash, int digits)
