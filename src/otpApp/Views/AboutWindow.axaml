@@ -3,7 +3,7 @@
         xmlns:vm="using:otpApp.ViewModels"
         x:Class="otpApp.Views.AboutWindow"
         x:DataType="vm:AboutWindowViewModel"
-        Title="About OTP App"
+        Title="{Binding Loc.AboutTitle}"
         Width="360"
         Height="280"
         WindowStartupLocation="CenterOwner"
@@ -11,24 +11,24 @@
         Background="{DynamicResource SurfaceDefaultBrush}">
     <Border Margin="24">
         <StackPanel VerticalAlignment="Center" Spacing="12">
-            <TextBlock Text="OTP App" Classes="HeaderText"
+            <TextBlock Text="{Binding Loc.AboutAppName}" Classes="HeaderText"
                        HorizontalAlignment="Center"/>
             <TextBlock Text="{Binding Version}"
                        Classes="SubHeaderText"
                        HorizontalAlignment="Center"/>
-            <TextBlock Text="Time-based One-Time Passwords"
+            <TextBlock Text="{Binding Loc.AboutSubtitle}"
                        Classes="SubHeaderText"
                        HorizontalAlignment="Center"
                        TextWrapping="Wrap"
                        TextAlignment="Center"/>
-            <TextBlock Text="A simple TOTP authenticator app built with Avalonia UI."
+            <TextBlock Text="{Binding Loc.AboutDescription}"
                        Foreground="{DynamicResource TextSecondaryBrush}"
                        HorizontalAlignment="Center"
                        TextWrapping="Wrap"
                        TextAlignment="Center"
                        FontSize="13"/>
             <Button Command="{Binding CloseCommand}"
-                    Content="{Binding Loc.Cancel, FallbackValue=Close}"
+                    Content="{Binding Loc.Cancel}"
                     HorizontalAlignment="Center"
                     Background="{DynamicResource SurfaceSubtleBrush}"
                     Foreground="{DynamicResource TextPrimaryBrush}"

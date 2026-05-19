@@ -80,6 +80,10 @@ public class LocalizationService : INotifyPropertyChanged
             ["PeriodTooltip"] = "Time interval in seconds between code changes",
             ["CounterTooltip"] = "Current counter value for HOTP",
             ["TypeTooltip"] = "One-time password type: TOTP (time-based) or HOTP (counter-based)",
+            ["AboutTitle"] = "About OTP App",
+            ["AboutAppName"] = "OTP App",
+            ["AboutSubtitle"] = "Time-based One-Time Passwords",
+            ["AboutDescription"] = "A simple TOTP authenticator app built with Avalonia UI.",
         },
         ["de"] = new()
         {
@@ -145,6 +149,10 @@ public class LocalizationService : INotifyPropertyChanged
             ["PeriodTooltip"] = "Zeitintervall in Sekunden zwischen Code-Änderungen",
             ["CounterTooltip"] = "Aktueller Zählerwert für HOTP",
             ["TypeTooltip"] = "Einmalpasswort-Typ: TOTP (zeitbasiert) oder HOTP (zählerbasiert)",
+            ["AboutTitle"] = "Über OTP App",
+            ["AboutAppName"] = "OTP App",
+            ["AboutSubtitle"] = "Zeitbasierte Einmalpasswörter",
+            ["AboutDescription"] = "Eine einfache TOTP-Authenticator-App mit Avalonia UI.",
         }
     };
 
@@ -225,6 +233,10 @@ public class LocalizationService : INotifyPropertyChanged
     public string PeriodTooltip => GetString();
     public string CounterTooltip => GetString();
     public string TypeTooltip => GetString();
+    public string AboutTitle => GetString();
+    public string AboutAppName => GetString();
+    public string AboutSubtitle => GetString();
+    public string AboutDescription => GetString();
 
     private string GetString( [CallerMemberName] string key = "" )
     {
