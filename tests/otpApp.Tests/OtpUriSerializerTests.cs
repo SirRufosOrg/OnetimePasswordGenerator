@@ -62,6 +62,26 @@ public class OtpUriSerializerTests
         result.Should().Be( "otpauth://hotp/ACME:user?secret=JBSWY3DPEHPK3PXP&issuer=ACME&counter=5" );
     }
 
+    [Theory]
+    [InlineData( 7, "7" )]
+    [InlineData( 8, "8" )]
+    [InlineData( 9, "9" )]
+    public void ToUri_WithCustomDigits( int digits, string expectedDigits )
+    {
+        var account = new OtpAccount
+        {
+            Type = OtpType.Totp,
+            Issuer = "Test",
+            Label = "user",
+            SecretBase32 = "JBSWY3DPEHPK3PXP",
+            Digits = digits,
+        };
+
+        var result = _sut.ToUri( account );
+
+        result.Should().Be( $"otpauth://totp/Test:user?secret=JBSWY3DPEHPK3PXP&issuer=Test&digits={expectedDigits}" );
+    }
+
     [Fact]
     public void ToUri_WithoutIssuer()
     {

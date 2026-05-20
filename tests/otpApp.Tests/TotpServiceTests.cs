@@ -189,6 +189,26 @@ public class TotpServiceTests
         result.Should().HaveLength( 6 );
     }
 
+    [Theory]
+    [InlineData( 7 )]
+    [InlineData( 8 )]
+    [InlineData( 9 )]
+    public void GenerateCode_VaryingDigits( int digits )
+    {
+        var counter = 0L;
+        var account = new OtpAccount
+        {
+            Type = OtpType.Hotp,
+            SecretBase32 = RfcSecret,
+            Algorithm = OtpAlgorithm.SHA1,
+            Digits = digits,
+        };
+
+        var result = _sut.GenerateCode( account, counter );
+
+        result.Should().HaveLength( digits );
+    }
+
     [Fact]
     public void GenerateCode_EightDigits()
     {

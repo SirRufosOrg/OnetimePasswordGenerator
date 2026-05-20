@@ -43,7 +43,7 @@ public partial class AddAccountViewModel : ViewModelBase, IDisposable
                     !string.IsNullOrWhiteSpace(issuer) &&
                     !string.IsNullOrWhiteSpace(label) &&
                     !string.IsNullOrWhiteSpace(secret) &&
-                    (digits == 6 || digits == 8) &&
+                    (digits is >= 6 and <= 9) &&
                     (type == OtpType.Hotp || period > 0)
         );
 

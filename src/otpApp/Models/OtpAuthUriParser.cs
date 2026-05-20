@@ -37,7 +37,7 @@ public static class OtpAuthUriParser
         var period = int.TryParse(query.GetValueOrDefault("period"), out var p) ? p : 30;
         var counter = long.TryParse(query.GetValueOrDefault("counter"), out var c) ? c : 0;
 
-        if (digits != 6 && digits != 8)
+        if (digits is < 6 or > 9)
             digits = 6;
 
         var algo = algorithm.ToUpperInvariant() switch

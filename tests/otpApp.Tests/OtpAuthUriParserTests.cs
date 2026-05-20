@@ -75,13 +75,17 @@ public class OtpAuthUriParserTests
         result!.Algorithm.Should().Be( expected );
     }
 
-    [Fact]
-    public void Parse_EightDigits()
+    [Theory]
+    [InlineData( 6 )]
+    [InlineData( 7 )]
+    [InlineData( 8 )]
+    [InlineData( 9 )]
+    public void Parse_Digits( int digits )
     {
-        var result = OtpAuthUriParser.Parse( "otpauth://totp/label?secret=JBSWY3DPEHPK3PXP&digits=8" );
+        var result = OtpAuthUriParser.Parse( $"otpauth://totp/label?secret=JBSWY3DPEHPK3PXP&digits={digits}" );
 
         result.Should().NotBeNull();
-        result!.Digits.Should().Be( 8 );
+        result!.Digits.Should().Be( digits );
     }
 
     [Fact]
