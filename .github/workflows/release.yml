@@ -17,12 +17,12 @@ jobs:
         include:
           - rid: win-x64
             suffix: windows-x64
-          - rid: win-arm64
-            suffix: windows-arm64
+          #- rid: win-arm64
+          #  suffix: windows-arm64
           - rid: osx-x64
             suffix: macos-x64
-          - rid: osx-arm64
-            suffix: macos-arm64
+          #- rid: osx-arm64
+          #  suffix: macos-arm64
 
     runs-on: [self-hosted, Linux]
 
