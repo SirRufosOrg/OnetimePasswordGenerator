@@ -86,13 +86,9 @@ jobs:
         shell: bash
         run: |
           if [ -d "publish/bundle/otpApp.app" ]; then
-            cd publish/bundle
-            zip -r "../otpApp-${{ matrix.suffix }}.app.zip" *
-            echo "path=publish/otpApp-${{ matrix.suffix }}.app.zip" >> "$GITHUB_OUTPUT"
+            echo "path=publish/bundle" >> "$GITHUB_OUTPUT"
           else
-            cd publish/raw
-            zip -r "../otpApp-${{ matrix.suffix }}.zip" *
-            echo "path=publish/otpApp-${{ matrix.suffix }}.zip" >> "$GITHUB_OUTPUT"
+            echo "path=publish/raw" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload artifact
