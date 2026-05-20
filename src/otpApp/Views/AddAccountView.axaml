@@ -35,7 +35,7 @@
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                     <NumericUpDown Value="{Binding Digits}"
-                                   Minimum="6" Maximum="9" Increment="2"
+                                   Minimum="6" Maximum="9" Increment="1"
                                    FormatString="0"
                                    ToolTip.Tip="{Binding Loc.DigitsTooltip}"
                                    Classes="UrlTextBox"
