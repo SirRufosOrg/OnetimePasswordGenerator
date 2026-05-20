@@ -81,8 +81,8 @@ jobs:
 
       - name: Install ZIP
         run: |-
-          apt update
-          apt install zip           
+          sudo apt update
+          sudo apt install zip           
       
       - name: Prepare upload
         id: prep
