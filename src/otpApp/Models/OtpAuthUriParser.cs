@@ -42,8 +42,15 @@ public static class OtpAuthUriParser
 
         var algo = algorithm.ToUpperInvariant() switch
         {
+            "SHA224" => OtpAlgorithm.SHA224,
             "SHA256" => OtpAlgorithm.SHA256,
+            "SHA384" => OtpAlgorithm.SHA384,
             "SHA512" => OtpAlgorithm.SHA512,
+            "SHA3-224" => OtpAlgorithm.SHA3_224,
+            "SHA3-256" => OtpAlgorithm.SHA3_256,
+            "SHA3-384" => OtpAlgorithm.SHA3_384,
+            "SHA3-512" => OtpAlgorithm.SHA3_512,
+            "MD5" => OtpAlgorithm.MD5,
             _ => OtpAlgorithm.SHA1
         };
 

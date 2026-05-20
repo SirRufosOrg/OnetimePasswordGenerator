@@ -142,6 +142,53 @@ public class TotpServiceTests
         result.Should().HaveLength( 6 );
     }
 
+    [Theory]
+    [InlineData( OtpAlgorithm.SHA224 )]
+    [InlineData( OtpAlgorithm.SHA384 )]
+    [InlineData( OtpAlgorithm.SHA3_224 )]
+    [InlineData( OtpAlgorithm.SHA3_256 )]
+    [InlineData( OtpAlgorithm.SHA3_384 )]
+    [InlineData( OtpAlgorithm.SHA3_512 )]
+    [InlineData( OtpAlgorithm.MD5 )]
+    public void GenerateCode_Hotp_Algorithm( OtpAlgorithm algorithm )
+    {
+        var account = new OtpAccount
+        {
+            Type = OtpType.Hotp,
+            SecretBase32 = RfcSecret,
+            Algorithm = algorithm,
+            Digits = 6,
+        };
+
+        var result = _sut.GenerateCode( account, 0L );
+
+        result.Should().HaveLength( 6 );
+    }
+
+    [Theory]
+    [InlineData( OtpAlgorithm.SHA224 )]
+    [InlineData( OtpAlgorithm.SHA384 )]
+    [InlineData( OtpAlgorithm.SHA3_224 )]
+    [InlineData( OtpAlgorithm.SHA3_256 )]
+    [InlineData( OtpAlgorithm.SHA3_384 )]
+    [InlineData( OtpAlgorithm.SHA3_512 )]
+    [InlineData( OtpAlgorithm.MD5 )]
+    public void GenerateCode_Totp_Algorithm( OtpAlgorithm algorithm )
+    {
+        var account = new OtpAccount
+        {
+            Type = OtpType.Totp,
+            SecretBase32 = RfcSecret,
+            Algorithm = algorithm,
+            Digits = 6,
+            Period = 30,
+        };
+
+        var result = _sut.GenerateCode( account, DateTime.UnixEpoch );
+
+        result.Should().HaveLength( 6 );
+    }
+
     [Fact]
     public void GenerateCode_EightDigits()
     {

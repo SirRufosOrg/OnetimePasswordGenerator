@@ -51,22 +51,28 @@ public class OtpAuthUriParserTests
         result.Period.Should().Be( 30 );
     }
 
-    [Fact]
-    public void Parse_SHA256()
+    [Theory]
+    [InlineData( "SHA1", OtpAlgorithm.SHA1 )]
+    [InlineData( "sha1", OtpAlgorithm.SHA1 )]
+    [InlineData( "SHA224", OtpAlgorithm.SHA224 )]
+    [InlineData( "sha224", OtpAlgorithm.SHA224 )]
+    [InlineData( "SHA256", OtpAlgorithm.SHA256 )]
+    [InlineData( "sha256", OtpAlgorithm.SHA256 )]
+    [InlineData( "SHA384", OtpAlgorithm.SHA384 )]
+    [InlineData( "SHA512", OtpAlgorithm.SHA512 )]
+    [InlineData( "SHA3-224", OtpAlgorithm.SHA3_224 )]
+    [InlineData( "sha3-224", OtpAlgorithm.SHA3_224 )]
+    [InlineData( "SHA3-256", OtpAlgorithm.SHA3_256 )]
+    [InlineData( "SHA3-384", OtpAlgorithm.SHA3_384 )]
+    [InlineData( "SHA3-512", OtpAlgorithm.SHA3_512 )]
+    [InlineData( "MD5", OtpAlgorithm.MD5 )]
+    [InlineData( "md5", OtpAlgorithm.MD5 )]
+    public void Parse_Algorithm( string algorithmString, OtpAlgorithm expected )
     {
-        var result = OtpAuthUriParser.Parse( "otpauth://totp/label?secret=JBSWY3DPEHPK3PXP&algorithm=SHA256" );
+        var result = OtpAuthUriParser.Parse( $"otpauth://totp/label?secret=JBSWY3DPEHPK3PXP&algorithm={algorithmString}" );
 
         result.Should().NotBeNull();
-        result!.Algorithm.Should().Be( OtpAlgorithm.SHA256 );
-    }
-
-    [Fact]
-    public void Parse_SHA512()
-    {
-        var result = OtpAuthUriParser.Parse( "otpauth://totp/label?secret=JBSWY3DPEHPK3PXP&algorithm=SHA512" );
-
-        result.Should().NotBeNull();
-        result!.Algorithm.Should().Be( OtpAlgorithm.SHA512 );
+        result!.Algorithm.Should().Be( expected );
     }
 
     [Fact]

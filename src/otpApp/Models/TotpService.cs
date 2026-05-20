@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using otpApp.Models.HashAlgorithms;
 
 namespace otpApp.Models;
 
@@ -44,18 +45,93 @@ public class TotpService : ITotpService
 
     private static byte[] ComputeHmac(byte[] secret, byte[] counter, OtpAlgorithm algorithm)
     {
-        using var hmac = algorithm switch
+        return algorithm switch
         {
-            OtpAlgorithm.SHA256 => (HMAC)new HMACSHA256(secret),
-            OtpAlgorithm.SHA512 => new HMACSHA512(secret),
-            _ => new HMACSHA1(secret)
+            OtpAlgorithm.SHA224 => HmacSha224(secret, counter),
+            OtpAlgorithm.SHA256 => HmacBuiltIn(secret, counter, new HMACSHA256(secret)),
+            OtpAlgorithm.SHA384 => HmacBuiltIn(secret, counter, new HMACSHA384(secret)),
+            OtpAlgorithm.SHA512 => HmacBuiltIn(secret, counter, new HMACSHA512(secret)),
+            OtpAlgorithm.SHA3_224 => HmacSha3(secret, counter, 224),
+            OtpAlgorithm.SHA3_256 => HmacSha3(secret, counter, 256),
+            OtpAlgorithm.SHA3_384 => HmacSha3(secret, counter, 384),
+            OtpAlgorithm.SHA3_512 => HmacSha3(secret, counter, 512),
+            OtpAlgorithm.MD5 => HmacBuiltIn(secret, counter, new HMACMD5(secret)),
+            _ => HmacBuiltIn(secret, counter, new HMACSHA1(secret))
         };
-        return hmac.ComputeHash(counter);
+    }
+
+    private static byte[] HmacBuiltIn(byte[] secret, byte[] counter, HMAC hmac)
+    {
+        using (hmac)
+            return hmac.ComputeHash(counter);
+    }
+
+    private static byte[] HmacSha224(byte[] key, byte[] data)
+    {
+        const int blockSize = 64;
+        key = HashKeyIfNeeded(key, blockSize, () => new Sha224().ComputeHash(key));
+
+        var ipad = new byte[blockSize];
+        var opad = new byte[blockSize];
+        for (var i = 0; i < blockSize; i++)
+        {
+            ipad[i] = (byte)(key[i] ^ 0x36);
+            opad[i] = (byte)(key[i] ^ 0x5C);
+        }
+
+        using var innerHash = new Sha224();
+        innerHash.TransformBlock(ipad, 0, blockSize, null, 0);
+        innerHash.TransformFinalBlock(data, 0, data.Length);
+        var innerResult = innerHash.Hash!;
+
+        using var outerHash = new Sha224();
+        outerHash.TransformBlock(opad, 0, blockSize, null, 0);
+        outerHash.TransformFinalBlock(innerResult, 0, innerResult.Length);
+        return outerHash.Hash!;
+    }
+
+    private static byte[] HmacSha3(byte[] key, byte[] data, int hashBits)
+    {
+        var rate = (1600 - hashBits * 2) / 8;
+        key = HashKeyIfNeeded(key, rate, () => new Sha3(hashBits).ComputeHash(key));
+
+        var ipad = new byte[rate];
+        var opad = new byte[rate];
+        for (var i = 0; i < rate; i++)
+        {
+            ipad[i] = (byte)(key[i] ^ 0x36);
+            opad[i] = (byte)(key[i] ^ 0x5C);
+        }
+
+        using var innerHash = new Sha3(hashBits);
+        innerHash.TransformBlock(ipad, 0, rate, null, 0);
+        innerHash.TransformFinalBlock(data, 0, data.Length);
+        var innerResult = innerHash.Hash!;
+
+        using var outerHash = new Sha3(hashBits);
+        outerHash.TransformBlock(opad, 0, rate, null, 0);
+        outerHash.TransformFinalBlock(innerResult, 0, innerResult.Length);
+        return outerHash.Hash!;
+    }
+
+    private static byte[] HashKeyIfNeeded(byte[] key, int blockSize, Func<byte[]> hashKey)
+    {
+        if (key.Length > blockSize)
+            return hashKey();
+        if (key.Length < blockSize)
+        {
+            var padded = new byte[blockSize];
+            Array.Copy(key, padded, key.Length);
+            return padded;
+        }
+        return key;
     }
 
     private static string Truncate(byte[] hash, int digits)
     {
         var offset = hash[^1] & 0x0F;
+        if (offset + 4 > hash.Length)
+            offset = hash.Length - 4;
 
         var binary = ((hash[offset] & 0x7F) << 24)
                      | ((hash[offset + 1] & 0xFF) << 16)

@@ -9,8 +9,15 @@ public enum OtpType
 public enum OtpAlgorithm
 {
     SHA1,
+    SHA224,
     SHA256,
-    SHA512
+    SHA384,
+    SHA512,
+    SHA3_224,
+    SHA3_256,
+    SHA3_384,
+    SHA3_512,
+    MD5
 }
 
 public class OtpAccount

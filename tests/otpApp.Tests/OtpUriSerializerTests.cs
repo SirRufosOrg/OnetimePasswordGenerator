@@ -76,4 +76,30 @@ public class OtpUriSerializerTests
 
         result.Should().Be( "otpauth://totp/user%40email.com?secret=JBSWY3DPEHPK3PXP&issuer=" );
     }
+
+    [Theory]
+    [InlineData( OtpAlgorithm.SHA224, "SHA224" )]
+    [InlineData( OtpAlgorithm.SHA256, "SHA256" )]
+    [InlineData( OtpAlgorithm.SHA384, "SHA384" )]
+    [InlineData( OtpAlgorithm.SHA512, "SHA512" )]
+    [InlineData( OtpAlgorithm.SHA3_224, "SHA3-224" )]
+    [InlineData( OtpAlgorithm.SHA3_256, "SHA3-256" )]
+    [InlineData( OtpAlgorithm.SHA3_384, "SHA3-384" )]
+    [InlineData( OtpAlgorithm.SHA3_512, "SHA3-512" )]
+    [InlineData( OtpAlgorithm.MD5, "MD5" )]
+    public void ToUri_WithAlgorithm( OtpAlgorithm algorithm, string expectedAlgorithm )
+    {
+        var account = new OtpAccount
+        {
+            Type = OtpType.Totp,
+            Issuer = "Test",
+            Label = "user",
+            SecretBase32 = "JBSWY3DPEHPK3PXP",
+            Algorithm = algorithm,
+        };
+
+        var result = _sut.ToUri( account );
+
+        result.Should().Be( $"otpauth://totp/Test:user?secret=JBSWY3DPEHPK3PXP&issuer=Test&algorithm={expectedAlgorithm}" );
+    }
 }
