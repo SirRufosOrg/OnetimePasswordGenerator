@@ -27,6 +27,9 @@ jobs:
     runs-on: [self-hosted, Linux]
 
     steps:
+      - name: Test zip availability
+        run: zip -v
+        
       - uses: actions/checkout@v4
 
       - name: Setup .NET
@@ -74,27 +77,22 @@ jobs:
         shell: bash
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          BUNDLE="publish/otpApp.app"
+          BUNDLE="publish/bundle/otpApp.app"
           mkdir -p "$BUNDLE/Contents/MacOS" "$BUNDLE/Contents/Resources"
           cp -R publish/raw/ "$BUNDLE/Contents/MacOS/"
           sed "s/VERSION/$VERSION/g" src/otpApp/Platform/macOS/Info.plist > "$BUNDLE/Contents/Info.plist"          
 
-      - name: Install ZIP
-        run: |-
-          sudo apt update
-          sudo apt install zip           
-      
       - name: Prepare upload
         id: prep
         shell: bash
         run: |
-          if [ -d "publish/otpApp.app" ]; then
-            cd publish
-            zip -r "otpApp-${{ matrix.suffix }}.app.zip" "otpApp.app"
+          if [ -d "publish/bundle/otpApp.app" ]; then
+            cd publish/bundle
+            zip -r "../otpApp-${{ matrix.suffix }}.app.zip" *
             echo "path=publish/otpApp-${{ matrix.suffix }}.app.zip" >> "$GITHUB_OUTPUT"
           else
-            cd publish
-            zip -r "otpApp-${{ matrix.suffix }}.zip" "otpApp"
+            cd publish/raw
+            zip -r "../otpApp-${{ matrix.suffix }}.zip" *
             echo "path=publish/otpApp-${{ matrix.suffix }}.zip" >> "$GITHUB_OUTPUT"
           fi
 
