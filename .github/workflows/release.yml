@@ -78,7 +78,7 @@ jobs:
           VERSION="${GITHUB_REF_NAME#v}"
           BUNDLE="publish/bundle/otpApp.app"
           mkdir -p "$BUNDLE/Contents/MacOS" "$BUNDLE/Contents/Resources"
-          cp -R publish/raw/ "$BUNDLE/Contents/MacOS/"
+          cp -R publish/raw/* "$BUNDLE/Contents/MacOS/"
           sed "s/VERSION/$VERSION/g" src/otpApp/Platform/macOS/Info.plist > "$BUNDLE/Contents/Info.plist"          
 
       - name: Prepare upload
