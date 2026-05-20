@@ -91,7 +91,7 @@ public class TotpService : ITotpService
 
     private static IEnumerable<int> EnumerateBits(int value)
     {
-        for (var i = 4; i > 0; i--)
+        for (var i = 5; i > 0; i--)
         {
             yield return (value >> (i - 1)) & 1;
         }
