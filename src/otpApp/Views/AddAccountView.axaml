@@ -26,7 +26,13 @@
                 <ComboBox ItemsSource="{Binding Algorithms}"
                           SelectedItem="{Binding Algorithm}"
                           ToolTip.Tip="{Binding Loc.AlgorithmTooltip}"
-                          Classes="UrlTextBox" HorizontalAlignment="Stretch"/>
+                          Classes="UrlTextBox" HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource AlgorithmName}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
                 <ComboBox ItemsSource="{Binding OtpTypes}"
                           SelectedItem="{Binding Type}"

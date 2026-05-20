@@ -105,7 +105,13 @@
                           SelectedItem="{Binding EditAlgorithm}"
                           ToolTip.Tip="{Binding Loc.AlgorithmTooltip}"
                           Classes="UrlTextBox"
-                          HorizontalAlignment="Stretch"/>
+                          HorizontalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource AlgorithmName}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
                 <ComboBox ItemsSource="{Binding OtpTypes}"
                           SelectedItem="{Binding EditType}"

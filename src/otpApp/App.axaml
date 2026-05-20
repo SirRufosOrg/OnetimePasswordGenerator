@@ -16,6 +16,7 @@
             <local:InvertBoolConverter x:Key="InvertBool"/>
             <local:StringNotEmptyConverter x:Key="NotEmpty"/>
             <local:CodeSplitterConverter x:Key="CodeSplitter"/>
+            <local:AlgorithmNameConverter x:Key="AlgorithmName"/>
         </ResourceDictionary>
     </Application.Resources>
 
