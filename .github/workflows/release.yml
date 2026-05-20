@@ -39,11 +39,6 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Setup NODE
-        uses: actions/setup-node@v4
-        with: 
-          node-version: 24
-
       - name: Restore dependencies
         run: dotnet restore src/otpApp
 
