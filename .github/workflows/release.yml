@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Test zip availability
         run: zip -v
-        
+
       - uses: actions/checkout@v4
 
       - name: Setup .NET
@@ -71,6 +71,10 @@ jobs:
             -o publish/raw \
             -p:ReadyToRun=true \
             -p:DebugType=none
+
+      - name: Remove debug symbols
+        run: |
+          find publish/raw -type f -name "*.pdb" -delete
 
       - name: Create macOS app bundle
         if: ${{ startsWith(matrix.rid, 'osx') }}
